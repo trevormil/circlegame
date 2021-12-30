@@ -17,7 +17,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("YourContract", {
+  await deploy("CircleGame", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
@@ -25,14 +25,14 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   });
 
   // Getting a previously deployed contract
-  const YourContract = await ethers.getContract("YourContract", deployer);
-  /*  await YourContract.setPurpose("Hello");
+  const CircleGame = await ethers.getContract("CircleGame", deployer);
+  /*  await CircleGame.setPurpose("Hello");
   
-    To take ownership of yourContract using the ownable library uncomment next line and add the 
+    To take ownership of circleGame using the ownable library uncomment next line and add the 
     address you want to be the owner. 
-    // yourContract.transferOwnership(YOUR_ADDRESS_HERE);
+    // circleGame.transferOwnership(YOUR_ADDRESS_HERE);
 
-    //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
+    //const circleGame = await ethers.getContractAt('CircleGame', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   */
 
   /*
@@ -46,7 +46,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   /*
   //If you want to send some ETH to a contract on deploy (make your constructor payable!)
-  const yourContract = await deploy("YourContract", [], {
+  const circleGame = await deploy("CircleGame", [], {
   value: ethers.utils.parseEther("0.05")
   });
   */
@@ -54,7 +54,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   /*
   //If you want to link a library into your contract:
   // reference: https://github.com/austintgriffith/scaffold-eth/blob/using-libraries-example/packages/hardhat/scripts/deploy.js#L19
-  const yourContract = await deploy("YourContract", [], {}, {
+  const circleGame = await deploy("CircleGame", [], {}, {
    LibraryName: **LibraryAddress**
   });
   */
@@ -65,10 +65,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     // wait for etherscan to be ready to verify
     await sleep(15000);
     await run("verify:verify", {
-      address: YourContract.address,
-      contract: "contracts/YourContract.sol:YourContract",
+      address: CircleGame.address,
+      contract: "contracts/CircleGame.sol:CircleGame",
       contractArguments: [],
     });
   }
 };
-module.exports.tags = ["YourContract"];
+module.exports.tags = ["CircleGame"];
