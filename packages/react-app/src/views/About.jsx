@@ -23,7 +23,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    packages/react-app/views/Home.jsx
+
                 </span>
             </div>
             <div style={{ margin: 32 }}>
@@ -33,7 +33,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    {purpose}
+                    <a>https://discord.gg/ASCuCh5sz4</a>
                 </span>
             </div>
             <div style={{ margin: 32 }}>
@@ -43,7 +43,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    {purpose}
+                    <a></a>
                 </span>
             </div>
             <div style={{ margin: 32 }}>
@@ -53,7 +53,17 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    {purpose}
+                    <a></a>
+                </span>
+            </div>
+            <div style={{ margin: 32 }}>
+                <span style={{ marginRight: 8 }}>🤖</span>
+                Twitter: {" "}
+                <span
+                    className="highlight"
+                    style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
+                >
+                    <a></a>
                 </span>
             </div>
 

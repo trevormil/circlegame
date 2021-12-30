@@ -117,7 +117,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Green Balance: {" "}
                         {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span><br />
-                        Claimable  <span style={{ color: "green" }}>&#11044;</span> Portion = {this.state.greenBalance && this.props.potBalance ? (this.state.greenBalance / 15625) * 0.6 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span> = {this.state.greenBalance && this.props.potBalance ? (this.state.greenBalance / 15625) * 0.6 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -151,13 +151,13 @@ class Claim extends React.Component {
                         >
                             Claim Using {this.state.greenNumberToClaim} <span style={{ color: "green" }}>&#11044;</span>!
                         </Button>
-                        {this.state.greenBalance >= 5 && <div><br />Note: You are eligible to upgrade<br/>1 <span style={{ color: "red" }}>&#11044;</span> is worth 16.66% more than 5 <span style={{ color: "green" }}>&#11044;</span></div>}
+                        {this.state.greenBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "red" }}>&#11044;</span> is worth 16.66% more than 5 <span style={{ color: "green" }}>&#11044;</span></div>}
                     </div>
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Red Balance: {" "}
                         {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span><br />
-                        Claimable  <span style={{ color: "red" }}>&#11044;</span> Portion = {this.state.redBalance && this.props.potBalance ? (this.state.redBalance / 3125) * 0.7 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span> = {this.state.redBalance && this.props.potBalance ? (this.state.redBalance / 3125) * 0.7 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -191,13 +191,13 @@ class Claim extends React.Component {
                         >
                             Claim Using {this.state.redNumberToClaim} <span style={{ color: "red" }}>&#11044;</span>!
                         </Button>
-                        {this.state.redBalance >= 5 && <div><br />Note: You are eligible to upgrade<br/>1 <span style={{ color: "blue" }}>&#11044;</span> is worth 14.29% more than 5 <span style={{ color: "red" }}>&#11044;</span></div>}
+                        {this.state.redBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "blue" }}>&#11044;</span> is worth 14.29% more than 5 <span style={{ color: "red" }}>&#11044;</span></div>}
                     </div>
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Blue Balance: {" "}
                         {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span><br />
-                        Claimable  <span style={{ color: "blue" }}>&#11044;</span> Portion = {this.state.blueBalance && this.props.potBalance ? (this.state.blueBalance / 625) * 0.8 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span> = {this.state.blueBalance && this.props.potBalance ? (this.state.blueBalance / 625) * 0.8 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -231,13 +231,13 @@ class Claim extends React.Component {
                         >
                             Claim Using {this.state.blueNumberToClaim} <span style={{ color: "blue" }}>&#11044;</span>!
                         </Button>
-                        {this.state.blueBalance >= 5 && <div><br />Note: You are eligible to upgrade<br/>1 <span style={{ color: "purple" }}>&#11044;</span> is worth 12.5% more than 5 <span style={{ color: "blue" }}>&#11044;</span></div>}
+                        {this.state.blueBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "purple" }}>&#11044;</span> is worth 12.5% more than 5 <span style={{ color: "blue" }}>&#11044;</span></div>}
                     </div>
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Purple Balance: {" "}
                         {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span><br />
-                        Claimable  <span style={{ color: "purple" }}>&#11044;</span> Portion = {this.state.purpleBalance && this.props.potBalance ? (this.state.purpleBalance / 125) * 0.9 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span> = {this.state.purpleBalance && this.props.potBalance ? (this.state.purpleBalance / 125) * 0.9 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -271,13 +271,13 @@ class Claim extends React.Component {
                         >
                             Claim Using {this.state.purpleNumberToClaim} <span style={{ color: "purple" }}>&#11044;</span>!
                         </Button>
-                        {this.state.purpleBalance >= 5 && <div><br />Note: You are eligible to upgrade<br/>1 <span style={{ color: "pink" }}>&#11044;</span> is worth 11.11% more than 5 <span style={{ color: "purple" }}>&#11044;</span></div>}
+                        {this.state.purpleBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "pink" }}>&#11044;</span> is worth 11.11% more than 5 <span style={{ color: "purple" }}>&#11044;</span></div>}
                     </div>
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Pink Balance: {" "}
                         {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span><br />
-                        Claimable  <span style={{ color: "pink" }}>&#11044;</span> Portion = {this.state.pinkBalance && this.props.potBalance ? (this.state.pinkBalance / 25) * 1 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span> = {this.state.pinkBalance && this.props.potBalance ? (this.state.pinkBalance / 25) * 1 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {

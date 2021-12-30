@@ -23,8 +23,11 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     uint256 public constant initialClaimPrice = 10000000000000000; //0.01 ETH
     uint256 public constant upgradeClaimPrice = 10000000000000000; //0.01 ETH
     uint256 public numClaimed;
+    uint256 public DEADLINE_TIMESTAMP;
 
-    constructor() ERC1155("https://game.example/api/item/{id}.json") {}
+    constructor() ERC1155("https://game.example/api/item/{id}.json") {
+        DEADLINE_TIMESTAMP = block.timestamp + 69 days;
+    }
 
     function setURI(string memory newuri) public onlyOwner {
         _setURI(newuri);
@@ -54,11 +57,13 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     }
 
     function withdraw() public onlyOwner {
+        require(block.timestamp >= DEADLINE_TIMESTAMP + 7 days);
         uint balance = address(this).balance;
         payable(msg.sender).transfer(balance);
     }
 
     function claimInitialCoin(uint numberOfTokens) public payable {
+        require(block.timestamp <= DEADLINE_TIMESTAMP);
         require(numberOfTokens > 0, "Token amount must be positive");
         require(numClaimed.add(numberOfTokens) <= 5 ** 7, "Purchase would exceed max supply");
         require(initialClaimPrice.mul(numberOfTokens) <= msg.value, "Ether value sent is not correct");
@@ -68,6 +73,7 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     }
 
     function upgradeCoin(uint numberOfTokens, uint256 coinId) public payable {
+        require(block.timestamp <= DEADLINE_TIMESTAMP);
         require(numberOfTokens > 0 && numberOfTokens % 5 == 0, "Token amount must be positive amount and divisible by 5");
         require(coinId >= 0 && coinId < 5, "Not a valid coin ID");
         require(upgradeClaimPrice <= msg.value, "Ether value sent is not correct");
@@ -77,6 +83,7 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     }
 
     function claimStake(uint numberOfTokens, uint256 coinId) public {
+        require(block.timestamp <= DEADLINE_TIMESTAMP + 7 days);
         require(numberOfTokens > 0, "Token amount must be positive");
         require(coinId > 0 && coinId <= 5, "Not a valid coin ID");
         

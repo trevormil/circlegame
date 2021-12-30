@@ -37,8 +37,8 @@ function Home({ yourLocalBalance, readContracts }) {
                 &emsp;&emsp;b) sell their tokens to another player via OpenSea<br />
                 &emsp;&emsp;c) burn their tokens and cash out their percentage of "the pot". Each tier unlocks more % of the pot (see below).<br></br>
                 &emsp;&emsp;d) hold their tokens, watch the pot grow, and watch everything get scarcer.<br></br>
-                5) The game will end on Sunday, March 6th . The player with the rarest set of tokens at this point will be crowned the winner.<br />
-                6) Everyone will be able to cash out their respective portions of the pot until exactly a week after the deadline (Sunday, March 13th), but upgrading and minting will be locked.<br />
+                5) The game will end exactly 69 days :) after the contract deployment. The player with the rarest set of tokens at this point will be crowned the winner.<br />
+                6) Everyone will be able to cash out their respective portions of the pot until exactly a week after the deadline, but upgrading and minting will be locked.<br />
                 7) Whatever is left in "the pot" a week after Season 1 concludes will be allocated to the following places: <br />
                 &emsp;&emsp;a) 50% will be donated to a web3 cause (DAO, grants, etc) chosen by the winner.<br />
                 &emsp;&emsp;b) 30% will go towards funding the Circle Game DAO.<br />
