@@ -36,12 +36,25 @@ class Mint extends React.Component {
             this.fetchOrangeBalance();
         }
 
+        let mintTotal = (((this.state.numberToMint - 1) * 0.00001) / 2);
+
+        if (this.state.numberToMint == 0 || !this.props.mintPrice) {
+            mintTotal = 0;
+        }
+        else {
+            mintTotal += Number(utils.formatEther(this.props.mintPrice));
+            mintTotal *= this.state.numberToMint;
+        }
+
         return (
             <div>
                 <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
-                    <h2>Mint <span style={{ color: "orange" }}>&#11044;</span> (0.01 ETH each):</h2>
+                    <h2>Mint <span style={{ color: "orange" }}>&#11044;</span>!</h2>
                     <Divider />
                     <div style={{ margin: 8 }}>
+                        Current Starting Mint Price: ({this.props.mintPrice ? utils.formatEther(this.props.mintPrice) : "..."} ETH)<br />
+                        Each token minted will add 0.0001 to the mint price. <br />
+
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -51,7 +64,7 @@ class Mint extends React.Component {
                         <Button
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimInitialCoin(this.state.numberToMint, { value: utils.parseEther(0.01 * this.state.numberToMint + "") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimInitialCoin(this.state.numberToMint, { value: utils.parseEther(mintTotal + "") }), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -72,14 +85,14 @@ class Mint extends React.Component {
                                 this.fetchOrangeBalance();
                             }}
                         >
-                            Mint {this.state.numberToMint ? this.state.numberToMint.toString() : 0}!
+                            Mint {this.state.numberToMint ? this.state.numberToMint.toString() : 0} for {mintTotal.toFixed(5)} ETH!
                         </Button>
                     </div>
                     <Divider />
                     Your Balance: {this.state.orangeBalance} <span style={{ color: "orange" }}>&#11044;</span>
-
                     <Divider />
-                    Total Num Minted: {this.props.numMinted ? this.props.numMinted.toString() : 0} / 78,125
+                    Total <span style={{ color: "orange" }}>&#11044;</span> Minted: {this.props.numMinted ? this.props.numMinted.toString() : 0}<br />
+                    Total <span style={{ color: "orange" }}>&#11044;</span> Burned (Adjusted): {this.props.numBurned ? this.props.numBurned.toString() : 0}<br />
                 </div>
             </div>
         );

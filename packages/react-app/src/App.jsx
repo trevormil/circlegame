@@ -169,9 +169,10 @@ function App(props) {
     ]);
 
     const numMinted = useContractReader(readContracts, "CircleGame", "numClaimed");
+    const numBurned = useContractReader(readContracts, "CircleGame", "numBurned");
 
-    const potBalance = useBalance(localProvider, "0x5fbdb2315678afecb367f032d93f642f64180aa3");
-    console.log("POTBALANCE", potBalance);
+    const potBalance = useBalance(localProvider, "0x5FbDB2315678afecb367f032d93F642f64180aa3");
+    const currMintPrice = useContractReader(readContracts, "CircleGame", "initialClaimPrice");
 
     // keep track of a variable from the contract in the local React state:
     const purpose = useContractReader(readContracts, "YourContract", "purpose");
@@ -251,7 +252,7 @@ function App(props) {
     return (
         <div className="App">
             {/* ✏️ Edit the header and change the title to your project name */}
-            <Header />
+            <Header potBalance={potBalance} />
             <NetworkDisplay
                 NETWORKCHECK={NETWORKCHECK}
                 localChainId={localChainId}
@@ -316,6 +317,8 @@ function App(props) {
                         readContracts={readContracts}
                         purpose={purpose}
                         numMinted={numMinted}
+                        mintPrice={currMintPrice}
+                        numBurned={numBurned}
                     />
                 </Route>
                 <Route exact path="/upgrade">
@@ -331,6 +334,8 @@ function App(props) {
                         readContracts={readContracts}
                         purpose={purpose}
                         numMinted={numMinted}
+                        numBurned={numBurned}
+
                     />
                 </Route>
                 <Route exact path="/claim">
@@ -347,6 +352,7 @@ function App(props) {
                         purpose={purpose}
                         numMinted={numMinted}
                         potBalance={potBalance}
+                        numBurned={numBurned}
                     />
                 </Route>
                 <Route exact path="/about">

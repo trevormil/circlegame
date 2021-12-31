@@ -117,7 +117,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Green Balance: {" "}
                         {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span><br />
-                        {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span> = {this.state.greenBalance && this.props.potBalance ? (this.state.greenBalance / 15625) * 0.6 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span> = {(this.state.greenBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.greenBalance * 5) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.6 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -157,7 +157,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Red Balance: {" "}
                         {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span><br />
-                        {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span> = {this.state.redBalance && this.props.potBalance ? (this.state.redBalance / 3125) * 0.7 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span> = {(this.state.redBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.redBalance * 25) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.7 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -197,7 +197,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Blue Balance: {" "}
                         {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span><br />
-                        {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span> = {this.state.blueBalance && this.props.potBalance ? (this.state.blueBalance / 625) * 0.8 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span> = {(this.state.blueBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.blueBalance * 125) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.8 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -237,7 +237,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Purple Balance: {" "}
                         {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span><br />
-                        {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span> = {this.state.purpleBalance && this.props.potBalance ? (this.state.purpleBalance / 125) * 0.9 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span> = {(this.state.purpleBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.purpleBalance * 625) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.9 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {
@@ -277,7 +277,7 @@ class Claim extends React.Component {
                     <div style={{ margin: 8 }}>
                         Pink Balance: {" "}
                         {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span><br />
-                        {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span> = {this.state.pinkBalance && this.props.potBalance ? (this.state.pinkBalance / 25) * 1 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
+                        {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span> = {(this.state.pinkBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.pinkBalance * 3125) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 1 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
                             onChange={e => {

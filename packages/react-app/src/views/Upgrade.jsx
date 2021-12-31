@@ -106,7 +106,7 @@ class Upgrade extends React.Component {
                         {" "}<span style={{ color: "blue" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "} (0.01 ETH):</h2>
-                        <br />Note: 5 &#11044; of one tier = 1 &#11044; of next tier
+                    <br />Note: 5 &#11044; of one tier = 1 &#11044; of next tier
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Orange Balance: {" "}
@@ -121,7 +121,7 @@ class Upgrade extends React.Component {
                             disabled={this.state.orangeNumberToUpgrade == 0 || this.state.orangeNumberToUpgrade % 5 != 0 || this.state.orangeNumberToUpgrade > this.state.orangeBalance}
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.orangeNumberToUpgrade, 0, { value: utils.parseEther("0.01") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.orangeNumberToUpgrade, 0), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -161,7 +161,7 @@ class Upgrade extends React.Component {
                             disabled={this.state.greenNumberToUpgrade == 0 || this.state.greenNumberToUpgrade % 5 != 0 || this.state.greenNumberToUpgrade > this.state.greenBalance}
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.greenNumberToUpgrade, 1, { value: utils.parseEther("0.01") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.greenNumberToUpgrade, 1 ), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -201,7 +201,7 @@ class Upgrade extends React.Component {
                             disabled={this.state.redNumberToUpgrade == 0 || this.state.redNumberToUpgrade % 5 != 0 || this.state.redNumberToUpgrade > this.state.redBalance}
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.redNumberToUpgrade, 2, { value: utils.parseEther("0.01") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.redNumberToUpgrade, 2,), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -241,7 +241,7 @@ class Upgrade extends React.Component {
                             disabled={this.state.blueNumberToUpgrade == 0 || this.state.blueNumberToUpgrade % 5 != 0 || this.state.blueNumberToUpgrade > this.state.blueBalance}
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.blueNumberToUpgrade, 3, { value: utils.parseEther("0.01") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.blueNumberToUpgrade, 3,), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -281,7 +281,7 @@ class Upgrade extends React.Component {
                             disabled={this.state.purpleNumberToUpgrade == 0 || this.state.purpleNumberToUpgrade % 5 != 0 || this.state.purpleNumberToUpgrade > this.state.purpleBalance}
                             style={{ marginTop: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.purpleNumberToUpgrade, 4, { value: utils.parseEther("0.01") }), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.purpleNumberToUpgrade, 4, ), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");

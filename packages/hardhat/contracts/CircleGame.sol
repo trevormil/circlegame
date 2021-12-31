@@ -20,13 +20,13 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
     uint256 public constant TIER_ONE_YELLOW = 5;
     
     
-    uint256 public constant initialClaimPrice = 10000000000000000; //0.01 ETH
-    uint256 public constant upgradeClaimPrice = 10000000000000000; //0.01 ETH
+    uint256 public initialClaimPrice = 1000000000000000; //0.001 ETH
     uint256 public numClaimed;
+    uint256 public numBurned;
     uint256 public DEADLINE_TIMESTAMP;
 
-    constructor() ERC1155("https://game.example/api/item/{id}.json") {
-        DEADLINE_TIMESTAMP = block.timestamp + 69 days;
+    constructor() ERC1155("https://circlegame.s3.us-east-2.amazonaws.com/{id}.json") {
+        DEADLINE_TIMESTAMP = block.timestamp + 69 days; //set deadline to 69 days after deployment
     }
 
     function setURI(string memory newuri) public onlyOwner {
@@ -56,43 +56,54 @@ contract CircleGame is ERC1155, Ownable, ERC1155Burnable, ERC1155Supply {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
+    //withdraw function for remaining funds; locked until deadline + 1 week
     function withdraw() public onlyOwner {
-        require(block.timestamp >= DEADLINE_TIMESTAMP + 7 days);
+        require(block.timestamp >= DEADLINE_TIMESTAMP + 7 days, "Locked until week after deadline");
         uint balance = address(this).balance;
         payable(msg.sender).transfer(balance);
     }
 
+    //mint original orange coin
     function claimInitialCoin(uint numberOfTokens) public payable {
-        require(block.timestamp <= DEADLINE_TIMESTAMP);
-        require(numberOfTokens > 0, "Token amount must be positive");
-        require(numClaimed.add(numberOfTokens) <= 5 ** 7, "Purchase would exceed max supply");
-        require(initialClaimPrice.mul(numberOfTokens) <= msg.value, "Ether value sent is not correct");
-        
+        require(block.timestamp <= DEADLINE_TIMESTAMP, "Deadline to mint has passed");
+        require(numberOfTokens > 0, "Token amt must be >0");
+        uint256 currMintPrice = (numberOfTokens - 1).mul(10000000000000).div(2).add(initialClaimPrice);
+        require(currMintPrice <= msg.value, "Ether value sent is not enough.");
+
         _mint(msg.sender, TIER_SIX_ORANGE, numberOfTokens, "");
         numClaimed = numClaimed.add(numberOfTokens);
+        initialClaimPrice = initialClaimPrice.add((numberOfTokens).mul(10000000000000));
     }
 
-    function upgradeCoin(uint numberOfTokens, uint256 coinId) public payable {
-        require(block.timestamp <= DEADLINE_TIMESTAMP);
-        require(numberOfTokens > 0 && numberOfTokens % 5 == 0, "Token amount must be positive amount and divisible by 5");
+    function upgradeCoin(uint numberOfTokens, uint256 coinId) public {
+        require(block.timestamp <= DEADLINE_TIMESTAMP, "Deadline to upgrade has passed");
+        require(numberOfTokens > 0 && numberOfTokens % 5 == 0, "Token amt must be >0 and divisible by 5");
         require(coinId >= 0 && coinId < 5, "Not a valid coin ID");
-        require(upgradeClaimPrice <= msg.value, "Ether value sent is not correct");
         
+        //burn tokens and mint upgraded ones in a 1:5 ratio
         burn(msg.sender, coinId, numberOfTokens);
         _mint(msg.sender, coinId + 1, numberOfTokens / 5, "");
     }
 
     function claimStake(uint numberOfTokens, uint256 coinId) public {
-        require(block.timestamp <= DEADLINE_TIMESTAMP + 7 days);
+        require(block.timestamp <= DEADLINE_TIMESTAMP + 7 days, "Deadline to claim has passed");
         require(numberOfTokens > 0, "Token amount must be positive");
         require(coinId > 0 && coinId <= 5, "Not a valid coin ID");
+        require(balanceOf(msg.sender, coinId) >= numberOfTokens, "Token balance not enough");
+
         
+        //set totalPot to max claimable %: 60% for Tier 1 up to 100% for Tier 5
         uint256 totalPot = address(this).balance.div(10).mul(5 + coinId);
+        //adjust token weight as if it were converted back to Tier 0 tokens
         uint256 adjustedNumberOfTokens = numberOfTokens * 5 ** coinId;
+        uint256 reward = totalPot.div(numClaimed - numBurned).mul(adjustedNumberOfTokens); //calculate reward
 
-        uint256 reward = totalPot.div(5**7).mul(adjustedNumberOfTokens);
-
+        //burn tokens and pay out reward
         burn(msg.sender, coinId, numberOfTokens);
         payable(msg.sender).transfer(reward);
+        numBurned = numBurned.add(adjustedNumberOfTokens);
     }
+
+    fallback() external payable {}
+    receive() external payable {}   
 }
