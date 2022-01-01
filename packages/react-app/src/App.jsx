@@ -29,7 +29,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph, Mint, Upgrade, Claim, About } from "./views";
+import { Home, ExampleUI, Hints, Subgraph, Mint, Upgrade, Claim, About, Stats } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 import { useTokenBalance } from "eth-hooks/erc/erc-20/useTokenBalance";
 
@@ -78,7 +78,7 @@ function App(props) {
 
     const [injectedProvider, setInjectedProvider] = useState();
     const [address, setAddress] = useState();
-    const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
+    const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[2]);
     const location = useLocation();
 
     const targetNetwork = NETWORKS[selectedNetwork];
@@ -171,7 +171,7 @@ function App(props) {
     const numMinted = useContractReader(readContracts, "CircleGame", "numClaimed");
     const numBurned = useContractReader(readContracts, "CircleGame", "numBurned");
 
-    const potBalance = useBalance(localProvider, "0x5FbDB2315678afecb367f032d93F642f64180aa3");
+    const potBalance = useBalance(localProvider, "0x7b06EF73F5E0C9e00dF57fa5Fb90476DB4dc7e58");
     const currMintPrice = useContractReader(readContracts, "CircleGame", "initialClaimPrice");
 
     // keep track of a variable from the contract in the local React state:
@@ -265,6 +265,9 @@ function App(props) {
                 <Menu.Item key="/">
                     <Link to="/">Home</Link>
                 </Menu.Item>
+                <Menu.Item key="/stats">
+                    <Link to="/stats">Stats</Link>
+                </Menu.Item>
                 <Menu.Item key="/mint">
                     <Link to="/mint">Mint</Link>
                 </Menu.Item>
@@ -277,9 +280,7 @@ function App(props) {
                 <Menu.Item key="/about">
                     <Link to="/about">About</Link>
                 </Menu.Item>
-                <Menu.Item key="/debug">
-                    <Link to="/debug">Debug</Link>
-                </Menu.Item>
+
             </Menu>
 
             <Switch>
@@ -353,6 +354,24 @@ function App(props) {
                         numMinted={numMinted}
                         potBalance={potBalance}
                         numBurned={numBurned}
+                    />
+                </Route>
+                <Route exact path="/stats">
+                    <Stats
+                        address={address}
+                        userSigner={userSigner}
+                        mainnetProvider={mainnetProvider}
+                        localProvider={localProvider}
+                        yourLocalBalance={yourLocalBalance}
+                        price={price}
+                        tx={tx}
+                        writeContracts={writeContracts}
+                        readContracts={readContracts}
+                        purpose={purpose}
+                        numMinted={numMinted}
+                        potBalance={potBalance}
+                        numBurned={numBurned}
+                        mintPrice={currMintPrice}
                     />
                 </Route>
                 <Route exact path="/about">

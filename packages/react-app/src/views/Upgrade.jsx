@@ -105,7 +105,7 @@ class Upgrade extends React.Component {
                         {" "}<span style={{ color: "red" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "blue" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}
-                        {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "} (0.01 ETH):</h2>
+                        {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "}:</h2>
                     <br />Note: 5 &#11044; of one tier = 1 &#11044; of next tier
                     <Divider />
                     <div style={{ margin: 8 }}>

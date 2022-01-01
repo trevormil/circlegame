@@ -49,32 +49,35 @@ function Home({ yourLocalBalance, readContracts }) {
             </div>
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>🛠</span>
-                <b>Potential &#11044; Rewards:</b><br />
+                <b>How Much Each Tier &#11044; Can Claim:</b><br />
 
+                Pot <span style={{ color: "orange" }}>&#11044;</span> Count = Total <span style={{ color: "orange" }}>&#11044;</span> Minted - Total Adjusted <span style={{ color: "orange" }}>&#11044;</span> Burned
+                (1 <span style={{ color: "green" }}>&#11044;</span> = 5 <span style={{ color: "orange" }}>&#11044;</span>, 1 <span style={{ color: "red" }}>&#11044;</span> = 25 <span style={{ color: "orange" }}>&#11044;</span>, etc.)
+                <br /> <br />
+                <div style={{ color: "orange" }}>Tier 0: 1 &#11044; = 0% of Pot (Must upgrade at least one tier before you can claim)</div>
+                <div style={{ color: "green" }}>Tier 1: 1 &#11044; = 5 * 60% of Current Pot Balance / Pot <span style={{ color: "orange" }}>&#11044;</span> Count<br /></div>
+                <div style={{ color: "red" }}>Tier 2: 1 &#11044; =  25 * 70% of Current Pot Balance / Pot <span style={{ color: "orange" }}>&#11044;</span> Count (or 16.66 % more than 5 <span style={{ color: "green" }}>&#11044;</span>)<br /></div>
+                <div style={{ color: "blue" }}>Tier 3: 1 &#11044; =  125 * 80% of Current Pot Balance / Pot <span style={{ color: "orange" }}>&#11044;</span> Count  (or 14.29 % more than 5 <span style={{ color: "red" }}>&#11044;</span>)<br /></div>
+                <div style={{ color: "purple" }}>Tier 4: 1 &#11044; =  625 * 90% of Current Pot Balance / Pot <span style={{ color: "orange" }}>&#11044;</span> Count  (or 12.5 % more than 5 <span style={{ color: "blue" }}>&#11044;</span>)<br /></div>
+                <div style={{ color: "pink" }}>Tier 5: 1 &#11044; =  3125 * 100% of Current Pot Balance / Pot <span style={{ color: "orange" }}>&#11044;</span> Count  (or 11.11 % more than 5 <span style={{ color: "purple" }}>&#11044;</span>)<br /></div>
+            </div>
+            <div style={{ margin: 32 }}>
+                <span style={{ marginRight: 8 }}>📝</span>
+                <b>How The Math Works:</b><br />
+                Yes. Upon minting, your &#11044;'s claim value will not be as much as you initially paid, but that is the point of the game.<br></br>
+                By holding, other players will continue to make your tokens more valuable, and you will soon be in the profit (see below).
+                <br /><br />
 
-                <div style={{ color: "orange" }}>Tier 0: &#11044; = 0% of Pot (Must upgrade at least one tier before you can claim)</div>
-                <div style={{ color: "green" }}>Tier 1: &#11044; = Pot Balance * Pot Percentage * 60 % <br /></div>
-                <div style={{ color: "red" }}>Tier 2: &#11044; = Pot Balance * Pot Percentage * 70 %  (or 16.66 % more than 5 <span style={{ color: "green" }}>&#11044;</span>)<br /></div>
-                <div style={{ color: "blue" }}>Tier 3: &#11044; = Pot Balance * Pot Percentage * 80 %  (or 14.29 % more than 5 <span style={{ color: "red" }}>&#11044;</span>)<br /></div>
-                <div style={{ color: "purple" }}>Tier 4: &#11044; = Pot Balance * Pot Percentage * 90 %  (or 12.5 % more than 5 <span style={{ color: "blue" }}>&#11044;</span>)<br /></div>
-                <div style={{ color: "pink" }}>Tier 5: &#11044; = Pot Balance * Pot Percentage * 100 %  (or 11.11 % more than 5 <span style={{ color: "purple" }}>&#11044;</span>)<br /></div>
+                All actions of other players (mint, burn, sell) are designed to increase the value of your existing &#11044;: <br />
                 <br />
+                &#11044; Value = Current Pot Balance * Your Pot % * Tier Multiplier (constant)<br /><br />
 
+                <b>Minting: </b>Because the mint price increases each time, the pot balance will grow at a faster rate than your pot % decreases.<br />
+                <br />
+                <b>Burning: </b>If claiming at Tiers 1-4 (see section above), only 60-90% of the pot is eligible, so that extra 10-40% of the pot means one's pot % increases faster than the pot balance decreases.<br /><br />
 
-                The way you make profit in this game is to hold your tokens until the pot grows.<br />
-                For example, let's say you have 1 <span style={{ color: "green" }}>&#11044;</span>, your pot balance is 10%, and the pot is 10 ETH. You can cash out now at 0.6 ETH, but if you wait until the pot grows to 100 ETH, you will have 6 ETH.<br />
-                * Also note rule 5) from above, your tokens are designed to only increase in value if you hold.
-                <br />
-                <br />
+                <b>Selling: </b>When a player sells to another player, the pot balance will increase due to OpenSea royalties.<br /><br />
 
-                Pot Percentage = Adjusted Balance of <span style={{ color: "orange" }}>&#11044;</span> / (Total <span style={{ color: "orange" }}>&#11044;</span> Minted - Total Adjusted <span style={{ color: "orange" }}>&#11044;</span> Burned) <br />
-                * Adjusted means if all converted back to <span style={{ color: "orange" }}>&#11044;</span>, so 1 <span style={{ color: "green" }}>&#11044;</span> = 5 <span style={{ color: "orange" }}>&#11044;</span>, 1 <span style={{ color: "red" }}>&#11044;</span> = 25 <span style={{ color: "orange" }}>&#11044;</span>, etc.
-                <br />
-                <br />
-
-                Formula: % Claimable = Current Pot Balance * (0.5 + Tier #) * ((# Tokens * 5^Tier #) / (# Minted - # Burned))<br />
-                * Tier 0 is not eligible to claim.
-                <br />
                 <br />
                 <br />
             </div>

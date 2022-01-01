@@ -23,7 +23,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    <a>https://twitter.com/CircleGameNFT</a>
+                    <a href="https://twitter.com/CircleGameNFT">https://twitter.com/CircleGameNFT</a>
                 </span>
             </div>
             <div style={{ margin: 32 }}>
@@ -33,7 +33,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    <a>https://discord.gg/ASCuCh5sz4</a>
+                    <a href="https://discord.gg/ASCuCh5sz4">https://discord.gg/ASCuCh5sz4</a>
                 </span>
             </div>
 
@@ -67,7 +67,7 @@ function About({ yourLocalBalance, readContracts }) {
                     className="highlight"
                     style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
                 >
-                    <a>https://github.com/trevormil/circlegame</a>
+                    <a href="https://github.com/trevormil/circlegame">https://github.com/trevormil/circlegame</a>
                 </span>
             </div>
         </div>
