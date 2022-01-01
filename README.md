@@ -4,6 +4,8 @@ https://twitter.com/CircleGameNFT
 
 https://discord.gg/ASCuCh5sz4
 
+https://circlegame.io/
+
 # 🏗 Scaffold-ETH
 
 > everything you need to build on Ethereum! 🚀
