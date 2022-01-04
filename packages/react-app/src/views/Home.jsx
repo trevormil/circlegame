@@ -3,44 +3,35 @@ import { Link } from "react-router-dom";
 import { useContractReader } from "eth-hooks";
 import { ethers } from "ethers";
 
-/**
- * web3 props can be passed from '../App.jsx' into your local view component for use
- * @param {*} yourLocalBalance balance on current network
- * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
- * @returns react component
- */
-function Home({ yourLocalBalance, readContracts }) {
-    // you can also use hooks locally in your component of choice
-    // in this case, let's keep track of 'purpose' variable from our contract
-    const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
+function Home() {
     return (
-        <div style={{ textAlign: "left" }}>
+        <div style={{ textAlign: "left", fontSize: 16 }}>
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>📝</span>
                 <b>Welcome! Circle Game is an NFT social experiment built to test how its players will act when faced with deadlines, peer pressure, and financial rewards.</b>
             </div>
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>🤓</span>
-                <b>How The Game is Played:</b> <br />
-                1) An infinite amount of Orange Circles <span style={{ color: "orange" }}>&#11044;</span> are available to mint. Mint price starts at 0.001 ETH each. Every circle minted increases the mint price by 0.00001 ETH.<br />
+                <b>Rules of the Game:</b> <br />
+                1) An infinite amount of Orange Circles <span style={{ color: "orange" }}>&#11044;</span> are available to mint. Mint price starts at 0.001 ETH each. Every circle minted increases the next mint price by 0.00001 ETH.<br />
                 2) There are six tiers of circles:
                 {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "red" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "blue" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}
-                {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "} (common -> rare). Five circles of one tier can be upgraded to one circle of the next tier. Each tier correlates to a claimable percentage of the pot.<br />
+                {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "} (common -> rare). Five circles of one tier can be upgraded to one circle of the next tier (5 <span style={{ color: "orange" }}>&#11044;</span> = 1 <span style={{ color: "green" }}>&#11044;</span>, 5 <span style={{ color: "green" }}>&#11044;</span> = 1 <span style={{ color: "red" }}>&#11044;</span>, and so on).<br />
                 3) All the ETH revenue from minting and OpenSea royalties go into "the pot".<br />
-                4) Players, at any time, can choose to burn their tokens and cash out a percentage of "the pot". The rarer the token, the more one is able to cash out. (see below).<br />
-                5) The game is designed so that your token value will increase over time when other players mint/burn/sell.<br />
+                4) Players, at any time, can choose to burn their circles and cash out a percentage of "the pot". Higher tier circles can cash out more than lower tier ones (see below).<br />
+                5) The game is designed so that a token value will increase over time when other players mint/burn/sell.<br />
                 6) At each tier, a player has four choices:<br />
                 &emsp;&emsp;a) accumulate five tokens and upgrade to the next tier token<br />
-                &emsp;&emsp;b) sell their tokens to another player via OpenSea.<br />
-                &emsp;&emsp;c) claim their reward and cash out their percentage of "the pot".<br></br>
-                &emsp;&emsp;d) hold their tokens and watch the value increase naturally as everything gets scarcer/more expensive.<br></br>
+                &emsp;&emsp;b) sell tokens to another player via OpenSea.<br />
+                &emsp;&emsp;c) claim reward and cash out a percentage of "the pot".<br></br>
+                &emsp;&emsp;d) hold the tokens and watch their value increase naturally.<br></br>
                 7) The game will end exactly 69 days :) after the contract deployment. The player with the rarest set of tokens at this point will be crowned the winner.<br />
-                8) Everyone will be able to cash out their respective portions of the pot until exactly a week after the deadline, but upgrading and minting will be locked.<br />
+                8) Players will be able to cash out their respective portions until exactly a week after the deadline, but upgrading and minting will be locked.<br />
                 9) Whatever is left in "the pot" a week after Season 1 concludes will be allocated to the following places: <br />
                 &emsp;&emsp;a) 50% will be donated to a web3 cause (DAO, grants, etc) chosen by the winner.<br />
                 &emsp;&emsp;b) 30% will go towards funding the Circle Game DAO.<br />
@@ -64,22 +55,15 @@ function Home({ yourLocalBalance, readContracts }) {
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>📝</span>
                 <b>How The Math Works:</b><br />
-                Yes. Upon minting, your &#11044;'s claim value will not be as much as you initially paid, but that is the point of the game.<br></br>
-                By holding, other players will continue to make your tokens more valuable, and you will soon be in the profit (see below).
-                <br /><br />
-
-                All actions of other players (mint, burn, sell) are designed to increase the value of your existing &#11044;: <br />
+                All actions of other players (mint, burn, sell) are designed to increase the value of all existing &#11044;: <br />
                 <br />
-                &#11044; Value = Current Pot Balance * Your Pot % * Tier Multiplier (constant)<br /><br />
+                <b>Formula</b>: &#11044; Value = Current Pot Balance * Player's Pot % * Constant Tier Multiplier<br /><br />
 
-                <b>Minting: </b>Because the mint price increases each time, the pot balance will grow at a faster rate than your pot % decreases.<br />
+                <b>Minting: </b>Because the mint price increases each time, the pot balance will grow at a faster rate than one's pot % decreases.<br />
                 <br />
-                <b>Burning: </b>If claiming at Tiers 1-4 (see section above), only 60-90% of the pot is eligible, so that extra 10-40% of the pot means one's pot % increases faster than the pot balance decreases.<br /><br />
+                <b>Burning: </b>If claiming at Tiers 1-4 (see section above), only 60-90% of the pot is eligible, so this means one's pot % increases faster than the pot balance decreases.<br /><br />
 
                 <b>Selling: </b>When a player sells to another player, the pot balance will increase due to OpenSea royalties.<br /><br />
-
-                <br />
-                <br />
             </div>
         </div>
     );

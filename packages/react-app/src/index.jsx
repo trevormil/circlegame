@@ -7,8 +7,8 @@ import App from "./App";
 import "./index.css";
 
 const themes = {
-  dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
-  light: `${process.env.PUBLIC_URL}/light-theme.css`,
+    dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
+    light: `${process.env.PUBLIC_URL}/light-theme.css`,
 };
 
 const prevTheme = window.localStorage.getItem("theme");
@@ -16,17 +16,17 @@ const prevTheme = window.localStorage.getItem("theme");
 const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
 
 const client = new ApolloClient({
-  uri: subgraphUri,
-  cache: new InMemoryCache(),
+    uri: subgraphUri,
+    cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "dark"}>
-      <BrowserRouter>
-        <App subgraphUri={subgraphUri} />
-      </BrowserRouter>
-    </ThemeSwitcherProvider>
-  </ApolloProvider>,
-  document.getElementById("root"),
+    <ApolloProvider client={client}>
+        <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
+            <BrowserRouter>
+                <App subgraphUri={subgraphUri} />
+            </BrowserRouter>
+        </ThemeSwitcherProvider>
+    </ApolloProvider>,
+    document.getElementById("root"),
 );

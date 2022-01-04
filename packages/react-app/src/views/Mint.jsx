@@ -48,12 +48,13 @@ class Mint extends React.Component {
 
         return (
             <div>
-                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Mint <span style={{ color: "orange" }}>&#11044;</span>!</h2>
                     <Divider />
                     <div style={{ margin: 8 }}>
                         Current Starting Mint Price: ({this.props.mintPrice ? utils.formatEther(this.props.mintPrice) : "..."} ETH)<br />
-                        Each token minted will add 0.0001 to the mint price. <br />
+                        Each token minted adds 0.0001 to the mint price. <br />
+
 
                         <InputNumber
                             min={0} max={1000000} defaultValue={0}
@@ -62,7 +63,7 @@ class Mint extends React.Component {
                             }}
                         />
                         <Button
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimInitialCoin(this.state.numberToMint, { value: utils.parseEther(mintTotal + "") }), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -87,6 +88,7 @@ class Mint extends React.Component {
                         >
                             Mint {this.state.numberToMint ? this.state.numberToMint.toString() : 0} for {mintTotal.toFixed(5)} ETH!
                         </Button>
+
                     </div>
                     <Divider />
                     Your Balance: {this.state.orangeBalance} <span style={{ color: "orange" }}>&#11044;</span>
@@ -94,6 +96,15 @@ class Mint extends React.Component {
                     Total <span style={{ color: "orange" }}>&#11044;</span> Minted: {this.props.numMinted ? this.props.numMinted.toString() : 0}<br />
                     Total <span style={{ color: "orange" }}>&#11044;</span> Burned (Adjusted): {this.props.numBurned ? this.props.numBurned.toString() : 0}<br />
                 </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
             </div>
         );
     }

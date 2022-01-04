@@ -97,7 +97,7 @@ class Claim extends React.Component {
 
         return (
             <div>
-                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Claim
                         {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
@@ -126,7 +126,7 @@ class Claim extends React.Component {
                         />
                         <Button
                             disabled={this.state.greenNumberToClaim == 0 || this.state.greenNumberToClaim > this.state.greenBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.greenNumberToClaim, 1), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -166,7 +166,7 @@ class Claim extends React.Component {
                         />
                         <Button
                             disabled={this.state.redNumberToClaim == 0 || this.state.redNumberToClaim > this.state.redBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.redNumberToClaim, 2), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -206,7 +206,7 @@ class Claim extends React.Component {
                         />
                         <Button
                             disabled={this.state.blueNumberToClaim == 0 || this.state.blueNumberToClaim > this.state.blueBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.blueNumberToClaim, 3), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -246,7 +246,7 @@ class Claim extends React.Component {
                         />
                         <Button
                             disabled={this.state.purpleNumberToClaim == 0 || this.state.purpleNumberToClaim > this.state.purpleBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.purpleNumberToClaim, 4), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -286,7 +286,7 @@ class Claim extends React.Component {
                         />
                         <Button
                             disabled={this.state.pinkNumberToClaim == 0 || this.state.pinkNumberToClaim > this.state.pinkBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.pinkNumberToClaim, 5), update => {
                                     console.log("📡 Transaction Update:", update);

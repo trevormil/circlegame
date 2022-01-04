@@ -98,7 +98,7 @@ class Upgrade extends React.Component {
 
         return (
             <div>
-                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Upgrade
                         {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
@@ -119,7 +119,7 @@ class Upgrade extends React.Component {
                         />
                         <Button
                             disabled={this.state.orangeNumberToUpgrade == 0 || this.state.orangeNumberToUpgrade % 5 != 0 || this.state.orangeNumberToUpgrade > this.state.orangeBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8,  marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.orangeNumberToUpgrade, 0), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -159,7 +159,7 @@ class Upgrade extends React.Component {
                         />
                         <Button
                             disabled={this.state.greenNumberToUpgrade == 0 || this.state.greenNumberToUpgrade % 5 != 0 || this.state.greenNumberToUpgrade > this.state.greenBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8,  marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.greenNumberToUpgrade, 1 ), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -199,7 +199,7 @@ class Upgrade extends React.Component {
                         />
                         <Button
                             disabled={this.state.redNumberToUpgrade == 0 || this.state.redNumberToUpgrade % 5 != 0 || this.state.redNumberToUpgrade > this.state.redBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8,  marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.redNumberToUpgrade, 2,), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -239,7 +239,7 @@ class Upgrade extends React.Component {
                         />
                         <Button
                             disabled={this.state.blueNumberToUpgrade == 0 || this.state.blueNumberToUpgrade % 5 != 0 || this.state.blueNumberToUpgrade > this.state.blueBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8,  marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.blueNumberToUpgrade, 3,), update => {
                                     console.log("📡 Transaction Update:", update);
@@ -279,7 +279,7 @@ class Upgrade extends React.Component {
                         />
                         <Button
                             disabled={this.state.purpleNumberToUpgrade == 0 || this.state.purpleNumberToUpgrade % 5 != 0 || this.state.purpleNumberToUpgrade > this.state.purpleBalance}
-                            style={{ marginTop: 8 }}
+                            style={{ marginTop: 8,  marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.upgradeCoin(this.state.purpleNumberToUpgrade, 4, ), update => {
                                     console.log("📡 Transaction Update:", update);

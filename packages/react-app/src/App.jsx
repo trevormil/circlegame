@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Menu, Row } from "antd";
+import { Menu } from "antd";
 import "antd/dist/antd.css";
 import {
     useBalance,
@@ -14,24 +14,18 @@ import { Link, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
 import {
     Account,
-    Contract,
-    Faucet,
-    GasGauge,
     Header,
-    Ramp,
     ThemeSwitch,
-    NetworkDisplay,
-    FaucetHint,
     NetworkSwitch,
 } from "./components";
-import { NETWORKS, ALCHEMY_KEY } from "./constants";
+import { NETWORKS, ALCHEMY_KEY, CONTRACT_ADDRESS } from "./constants";
 import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph, Mint, Upgrade, Claim, About, Stats } from "./views";
+import { Home,  Mint, Upgrade, Claim, Stats } from "./views";
 import { useStaticJsonRPC } from "./hooks";
-import { useTokenBalance } from "eth-hooks/erc/erc-20/useTokenBalance";
+import Footer from "./components/Footer";
 
 const { ethers } = require("ethers");
 /*
@@ -57,9 +51,9 @@ const { ethers } = require("ethers");
 const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 const NETWORKCHECK = true;
-const USE_BURNER_WALLET = true; // toggle burner wallet feature
+const USE_BURNER_WALLET = false; // toggle burner wallet feature
 const USE_NETWORK_SELECTOR = false;
 
 const web3Modal = Web3ModalSetup();
@@ -171,16 +165,9 @@ function App(props) {
     const numMinted = useContractReader(readContracts, "CircleGame", "numClaimed");
     const numBurned = useContractReader(readContracts, "CircleGame", "numBurned");
 
-    const potBalance = useBalance(localProvider, "0x7b06EF73F5E0C9e00dF57fa5Fb90476DB4dc7e58");
+    const potBalance = useBalance(localProvider, CONTRACT_ADDRESS);
     const currMintPrice = useContractReader(readContracts, "CircleGame", "initialClaimPrice");
 
-    // keep track of a variable from the contract in the local React state:
-    const purpose = useContractReader(readContracts, "YourContract", "purpose");
-
-    /*
-    const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
-    console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
-    */
 
     //
     // 🧫 DEBUG 👨🏻‍🔬
@@ -253,15 +240,7 @@ function App(props) {
         <div className="App">
             {/* ✏️ Edit the header and change the title to your project name */}
             <Header potBalance={potBalance} />
-            <NetworkDisplay
-                NETWORKCHECK={NETWORKCHECK}
-                localChainId={localChainId}
-                selectedChainId={selectedChainId}
-                targetNetwork={targetNetwork}
-                logoutOfWeb3Modal={logoutOfWeb3Modal}
-                USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
-            />
-            <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
+            <Menu style={{ textAlign: "center", marginTop: 40, fontSize: 18 }} selectedKeys={[location.pathname]} mode="horizontal">
                 <Menu.Item key="/">
                     <Link to="/">Home</Link>
                 </Menu.Item>
@@ -275,48 +254,19 @@ function App(props) {
                     <Link to="/upgrade">Upgrade</Link>
                 </Menu.Item>
                 <Menu.Item key="/claim">
-                    <Link to="/claim">Claim Rewards</Link>
+                    <Link to="/claim">Claim</Link>
                 </Menu.Item>
-                <Menu.Item key="/about">
-                    <Link to="/about">About</Link>
-                </Menu.Item>
-
             </Menu>
 
             <Switch>
                 <Route exact path="/">
-                    {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-                    <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
-                </Route>
-                <Route exact path="/debug">
-                    {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-
-                    <Contract
-                        name="YourContract"
-                        price={price}
-                        signer={userSigner}
-                        provider={localProvider}
-                        address={address}
-                        blockExplorer={blockExplorer}
-                        contractConfig={contractConfig}
-                    />
+                    <Home />
                 </Route>
                 <Route exact path="/mint">
                     <Mint
                         address={address}
-                        userSigner={userSigner}
-                        mainnetProvider={mainnetProvider}
-                        localProvider={localProvider}
-                        yourLocalBalance={yourLocalBalance}
-                        price={price}
                         tx={tx}
-                        writeContracts={writeContracts}
                         readContracts={readContracts}
-                        purpose={purpose}
                         numMinted={numMinted}
                         mintPrice={currMintPrice}
                         numBurned={numBurned}
@@ -325,13 +275,7 @@ function App(props) {
                 <Route exact path="/upgrade">
                     <Upgrade
                         address={address}
-                        userSigner={userSigner}
-                        mainnetProvider={mainnetProvider}
-                        localProvider={localProvider}
-                        yourLocalBalance={yourLocalBalance}
-                        price={price}
                         tx={tx}
-                        writeContracts={writeContracts}
                         readContracts={readContracts}
                         purpose={purpose}
                         numMinted={numMinted}
@@ -342,15 +286,8 @@ function App(props) {
                 <Route exact path="/claim">
                     <Claim
                         address={address}
-                        userSigner={userSigner}
-                        mainnetProvider={mainnetProvider}
-                        localProvider={localProvider}
-                        yourLocalBalance={yourLocalBalance}
-                        price={price}
                         tx={tx}
-                        writeContracts={writeContracts}
                         readContracts={readContracts}
-                        purpose={purpose}
                         numMinted={numMinted}
                         potBalance={potBalance}
                         numBurned={numBurned}
@@ -359,24 +296,13 @@ function App(props) {
                 <Route exact path="/stats">
                     <Stats
                         address={address}
-                        userSigner={userSigner}
-                        mainnetProvider={mainnetProvider}
-                        localProvider={localProvider}
-                        yourLocalBalance={yourLocalBalance}
-                        price={price}
                         tx={tx}
-                        writeContracts={writeContracts}
                         readContracts={readContracts}
-                        purpose={purpose}
                         numMinted={numMinted}
                         potBalance={potBalance}
                         numBurned={numBurned}
                         mintPrice={currMintPrice}
                     />
-                </Route>
-                <Route exact path="/about">
-                    {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-                    <About yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
                 </Route>
             </Switch>
 
@@ -407,11 +333,8 @@ function App(props) {
                         blockExplorer={blockExplorer}
                     />
                 </div>
-                {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
-                    <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
-                )}
             </div>
-
+            <Footer potBalance={potBalance} />
         </div>
     );
 }

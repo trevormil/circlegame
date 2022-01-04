@@ -1,5 +1,7 @@
+export const CONTRACT_ADDRESS = "0x7b06EF73F5E0C9e00dF57fa5Fb90476DB4dc7e58";
+
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
-export const INFURA_ID = "7b0e75d38d424750b92791477924d133";
+export const INFURA_ID = "7001e54c4b6045bf8a0a0b2e6f087e33";
 
 // MY ETHERSCAN_ID, SWAP IN YOURS FROM https://etherscan.io/myapikey
 export const ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
