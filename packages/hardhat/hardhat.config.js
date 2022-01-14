@@ -118,7 +118,7 @@ module.exports = {
       },
     },
     mainnet: {
-      url: "https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+      url: "https://mainnet.infura.io/v3/7001e54c4b6045bf8a0a0b2e6f087e33", // <---- YOUR INFURA ID! (or it won't work)
 
       //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
 
@@ -169,6 +169,13 @@ module.exports = {
 
     matic: {
       url: "https://rpc-mainnet.maticvigil.com/",
+      gasPrice: 1000000000,
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+    },
+    matictest: {
+      url: "https://rpc-mumbai.maticvigil.com/",
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),

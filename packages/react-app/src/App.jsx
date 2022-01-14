@@ -23,7 +23,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home,  Mint, Upgrade, Claim, Stats } from "./views";
+import { Home, Mint, Upgrade, Claim, Stats, Advanced, Simulator } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 import Footer from "./components/Footer";
 
@@ -101,11 +101,12 @@ function App(props) {
         }, 1);
     };
 
-    /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
-    const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
+    // /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
+    // const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
 
-    /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
+    // /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
     const gasPrice = useGasPrice(targetNetwork, "fast");
+
     // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
     const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
     const userSigner = userProviderAndSigner.signer;
@@ -130,13 +131,6 @@ function App(props) {
 
     // The transactor wraps transactions and provides notificiations
     const tx = Transactor(userSigner, gasPrice);
-
-    // 🏗 scaffold-eth is full of handy hooks like this one to get your balance:
-    const yourLocalBalance = useBalance(localProvider, address);
-
-    // Just plug in different 🛰 providers to get your balance on different chains:
-    const yourMainnetBalance = useBalance(mainnetProvider, address);
-
     // const contractConfig = useContractConfig();
 
     const contractConfig = { deployedContracts: deployedContracts || {}, externalContracts: externalContracts || {} };
@@ -147,27 +141,18 @@ function App(props) {
     // If you want to make 🔐 write transactions to your contracts, use the userSigner:
     const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
-    // EXTERNAL CONTRACT EXAMPLE:
-    //
-    // If you want to bring in the mainnet DAI contract it would look like:
-    const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
+    const currDetails = useContractReader(readContracts, "CircleGame", "getDetails", [address]);
 
-    // If you want to call a function on a new block
-    useOnBlock(mainnetProvider, () => {
-        console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
-    });
+    let details = currDetails ? [...currDetails] : [0, 1000000000000000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    if (currDetails) {
+        for (let i = 2; i < 14; i++) {
+            details[i] = details[i].toNumber();
+        }
+    }
 
-    // Then read your DAI balance like:
-    const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
-        "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-    ]);
-
-    const numMinted = useContractReader(readContracts, "CircleGame", "numClaimed");
-    const numBurned = useContractReader(readContracts, "CircleGame", "numBurned");
-
-    const potBalance = useBalance(localProvider, CONTRACT_ADDRESS);
-    const currMintPrice = useContractReader(readContracts, "CircleGame", "initialClaimPrice");
-
+    //can just set these to be constant at end of game when they are declared
+    // const adjustedNumberOfTokens = useContractReader(readContracts, "CircleGame", "adjustedTokenTotal", 120);
+    // const claimableBalance = useContractReader(readContracts, "CircleGame", "endingClaimablePotBalance", 120);
 
     //
     // 🧫 DEBUG 👨🏻‍🔬
@@ -178,33 +163,24 @@ function App(props) {
             mainnetProvider &&
             address &&
             selectedChainId &&
-            yourLocalBalance &&
-            yourMainnetBalance &&
+
             readContracts &&
-            writeContracts &&
-            mainnetContracts
+            writeContracts
         ) {
             console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
             console.log("🌎 mainnetProvider", mainnetProvider);
             console.log("🏠 localChainId", localChainId);
             console.log("👩‍💼 selected address:", address);
             console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
-            console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
-            console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
             console.log("📝 readContracts", readContracts);
-            console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-            console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
             console.log("🔐 writeContracts", writeContracts);
         }
     }, [
         mainnetProvider,
         address,
         selectedChainId,
-        yourLocalBalance,
-        yourMainnetBalance,
         readContracts,
         writeContracts,
-        mainnetContracts,
     ]);
 
     const loadWeb3Modal = useCallback(async () => {
@@ -234,76 +210,130 @@ function App(props) {
         }
     }, [loadWeb3Modal]);
 
-    const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
-
     return (
         <div className="App">
             {/* ✏️ Edit the header and change the title to your project name */}
-            <Header potBalance={potBalance} />
+            <Header potBalance={details[0]} />
             <Menu style={{ textAlign: "center", marginTop: 40, fontSize: 18 }} selectedKeys={[location.pathname]} mode="horizontal">
                 <Menu.Item key="/">
                     <Link to="/">Home</Link>
                 </Menu.Item>
-                <Menu.Item key="/stats">
-                    <Link to="/stats">Stats</Link>
+                <Menu.Item key="/simulator" >
+                    <Link to="/simulator">Simulator</Link>
                 </Menu.Item>
-                <Menu.Item key="/mint">
+                <Menu.Item key="/mint" disabled={!address}>
                     <Link to="/mint">Mint</Link>
                 </Menu.Item>
-                <Menu.Item key="/upgrade">
+                <Menu.Item key="/upgrade" disabled={!address}>
                     <Link to="/upgrade">Upgrade</Link>
                 </Menu.Item>
-                <Menu.Item key="/claim">
+                <Menu.Item key="/claim" disabled={!address}>
                     <Link to="/claim">Claim</Link>
                 </Menu.Item>
             </Menu>
 
             <Switch>
                 <Route exact path="/">
-                    <Home />
+                    <Home
+                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                        potBalance={details[0]}
+                        mintPrice={details[1]}
+                    />
+                </Route>
+                <Route exact path="/simulator">
+                    <Simulator
+                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                        potBalance={details[0]}
+                        mintPrice={details[1]}
+                    />
                 </Route>
                 <Route exact path="/mint">
                     <Mint
                         address={address}
                         tx={tx}
                         readContracts={readContracts}
-                        numMinted={numMinted}
-                        mintPrice={currMintPrice}
-                        numBurned={numBurned}
+                        writeContracts={writeContracts}
+                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                        mintPrice={details[1]}
+                        orangeBalance={details[2]}
+                        greenBalance={details[3]}
+                        redBalance={details[4]}
+                        blueBalance={details[5]}
+                        purpleBalance={details[6]}
+                        pinkBalance={details[7]}
+                        totalOrangeBalance={details[8]}
+                        totalGreenBalance={details[9]}
+                        totalRedBalance={details[10]}
+                        totalBlueBalance={details[11]}
+                        totalPurpleBalance={details[12]}
+                        totalPinkBalance={details[13]}
                     />
                 </Route>
                 <Route exact path="/upgrade">
                     <Upgrade
                         address={address}
                         tx={tx}
+                        writeContracts={writeContracts}
                         readContracts={readContracts}
-                        purpose={purpose}
-                        numMinted={numMinted}
-                        numBurned={numBurned}
-
+                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                        potBalance={details[0]}
+                        orangeBalance={details[2]}
+                        greenBalance={details[3]}
+                        redBalance={details[4]}
+                        blueBalance={details[5]}
+                        purpleBalance={details[6]}
+                        pinkBalance={details[7]}
                     />
                 </Route>
                 <Route exact path="/claim">
                     <Claim
                         address={address}
                         tx={tx}
+                        writeContracts={writeContracts}
                         readContracts={readContracts}
-                        numMinted={numMinted}
-                        potBalance={potBalance}
-                        numBurned={numBurned}
+                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                        potBalance={details[0]}
+                        orangeBalance={details[2]}
+                        greenBalance={details[3]}
+                        redBalance={details[4]}
+                        blueBalance={details[5]}
+                        purpleBalance={details[6]}
+                        pinkBalance={details[7]}
+                        // adjustedNumberOfTokens={adjustedNumberOfTokens}
+                        // claimableBalance={claimableBalance}
+                        totalOrangeBalance={details[8]}
+                        totalGreenBalance={details[9]}
+                        totalRedBalance={details[10]}
+                        totalBlueBalance={details[11]}
+                        totalPurpleBalance={details[12]}
+                        totalPinkBalance={details[13]}
                     />
                 </Route>
-                <Route exact path="/stats">
+                {/* <Route exact path="/stats">
                     <Stats
                         address={address}
                         tx={tx}
+                        writeContracts={writeContracts}
                         readContracts={readContracts}
                         numMinted={numMinted}
                         potBalance={potBalance}
-                        numBurned={numBurned}
-                        mintPrice={currMintPrice}
+                        mintPrice={details[1]}
+                        orangeBalance={details[2]}
+                        greenBalance={details[3]}
+                        redBalance={details[4]}
+                        blueBalance={details[5]}
+                        purpleBalance={details[6]}
+                        pinkBalance={details[7]}
+                        updateBalances={updateBalances}
+                        balancesLoaded={balancesLoaded}
                     />
-                </Route>
+                </Route> */}
+                {/* <Route exact path="/advanced">
+                    <Advanced
+                        numMinted={numMinted}
+                        potBalance={potBalance}
+                        mintPrice={details[1]} />
+                </Route> */}
             </Switch>
 
             <ThemeSwitch />
@@ -326,7 +356,6 @@ function App(props) {
                         localProvider={localProvider}
                         userSigner={userSigner}
                         mainnetProvider={mainnetProvider}
-                        price={price}
                         web3Modal={web3Modal}
                         loadWeb3Modal={loadWeb3Modal}
                         logoutOfWeb3Modal={logoutOfWeb3Modal}
@@ -334,7 +363,7 @@ function App(props) {
                     />
                 </div>
             </div>
-            <Footer potBalance={potBalance} />
+            <Footer potBalance={details[0]} />
         </div>
     );
 }

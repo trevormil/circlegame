@@ -2,102 +2,34 @@ import { utils } from "ethers";
 import { Button, Divider, InputNumber } from "antd";
 import React from "react";
 
+function truncate(str, maxDecimalDigits) {
+    return "" + parseFloat(Number(str).toFixed(maxDecimalDigits));
+}
+
+
+
 class Claim extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            orangeBalance: "..",
-            greenBalance: "..",
-            redBalance: "..",
-            blueBalance: "..",
-            purpleBalance: "..",
-            pinkBalance: "..",
-            orangeNumberToClaim: 0,
-            redNumberToClaim: 0,
-            blueNumberToClaim: 0,
-            greenNumberToClaim: 0,
-            pinkNumberToClaim: 0,
-            purpleNumberToClaim: 0
-        }
 
-        this.fetchOrangeBalance();
-        this.fetchRedBalance();
-        this.fetchGreenBalance();
-        this.fetchBlueBalance();
-        this.fetchPinkBalance();
-        this.fetchPurpleBalance();
     }
 
-    async fetchGreenBalance() {
-        if (this.state.greenBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const greenBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 1);
-            this.setState({
-                greenBalance: greenBalance.toString()
-            })
-        }
-    }
-    async fetchRedBalance() {
-        if (this.state.redBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const redBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 2);
-            this.setState({
-                redBalance: redBalance.toString()
-            })
-        }
-    } async fetchPurpleBalance() {
-        if (this.state.purpleBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const purpleBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 4);
-            this.setState({
-                purpleBalance: purpleBalance.toString()
-            })
-        }
-    }
-    async fetchBlueBalance() {
-        if (this.state.blueBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const blueBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 3);
-            this.setState({
-                blueBalance: blueBalance.toString()
-            })
-        }
-    } async fetchPinkBalance() {
-        if (this.state.pinkBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const pinkBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 5);
-            this.setState({
-                pinkBalance: pinkBalance.toString()
-            })
-        }
-    }
-    async fetchOrangeBalance() {
-        if (this.state.orangeBalance == ".." && this.props.address && this.props.readContracts && this.props.readContracts.CircleGame) {
-            const orangeBalance = await this.props.readContracts.CircleGame.balanceOf(this.props.address, 0);
-            this.setState({
-                orangeBalance: orangeBalance.toString()
-            })
-        }
+    getTotalAdjustedTokens = () => {
+        let total = 0;
+        total += this.props.totalOrangeBalance * (1 + 0.1 * 0) * (5 ** 0);
+        total += this.props.totalGreenBalance * (1 + 0.1 * 1) * (5 ** 1);
+        total += this.props.totalRedBalance * (1 + 0.1 * 2) * (5 ** 2);
+        total += this.props.totalBlueBalance * (1 + 0.1 * 3) * (5 ** 3);
+        total += this.props.totalPurpleBalance * (1 + 0.1 * 4) * (5 ** 4);
+        total += this.props.totalPinkBalance * (1 + 0.1 * 5) * (5 ** 5);
+
+        return total;
     }
 
     render() {
-        if (this.state.orangeBalance == "..") {
-            this.fetchOrangeBalance();
-        }
-        if (this.state.greenBalance == "..") {
-            this.fetchGreenBalance();
-        }
-        if (this.state.blueBalance == "..") {
-            this.fetchBlueBalance();
-        }
-        if (this.state.purpleBalance == "..") {
-            this.fetchPurpleBalance();
-        }
-        if (this.state.pinkBalance == "..") {
-            this.fetchPinkBalance();
-        }
-        if (this.state.redBalance == "..") {
-            this.fetchRedBalance();
-        }
-
         return (
             <div>
-                <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
+                <div style={{ border: "3px solid #cccccc", borderRadius: 4, padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Claim
                         {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
@@ -106,29 +38,104 @@ class Claim extends React.Component {
                         {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}
                         {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "}</h2>
                     <br />
-                    Current Pot: {this.props.potBalance ? utils.formatEther(this.props.potBalance) : "..."} ETH
+                    Claim Values (if game ended now):<br />
+                    {console.log(this.getTotalAdjustedTokens())}
+                    1 <span style={{ color: "orange" }}>&#11044;</span> = {this.props.numMinted >= 1 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((1 * 1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "green" }}>&#11044;</span> = {this.props.numMinted >= 5 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((5 * 1.1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "red" }}>&#11044;</span> = {this.props.numMinted >= 25 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((25 * 1.2) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "blue" }}>&#11044;</span> = {this.props.numMinted >= 125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((125 * 1.3) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "purple" }}>&#11044;</span> = {this.props.numMinted >= 625 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((625 * 1.4) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "pink" }}>&#11044;</span> = {this.props.numMinted >= 3125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((3125 * 1.5) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+
                     <Divider />
                     <div style={{ margin: 8 }}>
-                        Orange Balance: {" "}
-                        {this.state.orangeBalance} <span style={{ color: "orange" }}>&#11044;</span><br />
-                        {<div><br />Note: Orange <span style={{ color: "orange" }}>&#11044;</span>'s cant claim anything. Upgrade to claim.</div>}
-                    </div>
-                    <Divider />
-                    <div style={{ margin: 8 }}>
-                        Green Balance: {" "}
-                        {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span><br />
-                        {this.state.greenBalance} <span style={{ color: "green" }}>&#11044;</span> = {(this.state.greenBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.greenBalance * 5) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.6 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
-                        <InputNumber
-                            min={0} max={1000000} defaultValue={0}
-                            onChange={e => {
-                                this.setState({ greenNumberToClaim: e });
-                            }}
-                        />
+                        <div style={{ margin: 8 }}>
+                            Your Balances: <br />
+                            {this.props.orangeBalance} <span style={{ color: "orange" }}>&#11044;</span>{"  "}
+                            {this.props.greenBalance} <span style={{ color: "green" }}>&#11044;</span>{"  "}
+                            {this.props.redBalance} <span style={{ color: "red" }}>&#11044;</span>{"  "}
+                            {this.props.blueBalance} <span style={{ color: "blue" }}>&#11044;</span>{"  "}
+                            {this.props.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span>{"  "}
+                            {this.props.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span>
+                            <br />
+                            {console.log(this.props.adjustedNumberOfTokens)}
+                            <br />
+                            Claimable Amount: <br />
+                            <b>{
+                                this.props.numMinted >= 1 && this.getTotalAdjustedTokens() > 0 ?
+                                    truncate(
+                                        "" +
+                                        (
+                                            this.props.orangeBalance * ((1 * 1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)) +
+                                            this.props.greenBalance * ((5 * 1.1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)) +
+                                            this.props.redBalance * ((25 * 1.2) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)) +
+                                            this.props.blueBalance * ((125 * 1.3) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)) +
+                                            this.props.purpleBalance * ((625 * 1.4) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)) +
+                                            this.props.pinkBalance * ((3125 * 1.5) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9))
+                                        )
+                                        , 6
+                                    )
+                                    :
+                                    0
+                            } ETH
+                            </b>
+                            {/*
+                            <Button
+                                style={{ marginTop: 8, marginLeft: 8 }}
+                                onClick={async () => {
+                                    const result = this.props.tx(this.props.writeContracts.CircleGame.endGame(), update => {
+                                        console.log("📡 Transaction Update:", update);
+                                        if (update && (update.status === "confirmed" || update.status === 1)) {
+                                            console.log(" 🍾 Transaction " + update.hash + " finished!");
+                                            console.log(
+                                                " ⛽️ " +
+                                                update.gasUsed +
+                                                "/" +
+                                                (update.gasLimit || update.gas) +
+                                                " @ " +
+                                                parseFloat(update.gasPrice) / 1000000000 +
+                                                " gwei",
+                                            );
+                                        }
+                                    });
+                                    console.log("awaiting metamask/web3 confirm result.", result);
+                                    console.log(await result);
+                                }}
+                            >
+                                End Game!
+                            </Button>
+                            <Button
+                                style={{ marginTop: 8, marginLeft: 8 }}
+                                onClick={async () => {
+                                    const result = this.props.tx(this.props.writeContracts.CircleGame.withdraw(), update => {
+                                        console.log("📡 Transaction Update:", update);
+                                        if (update && (update.status === "confirmed" || update.status === 1)) {
+                                            console.log(" 🍾 Transaction " + update.hash + " finished!");
+                                            console.log(
+                                                " ⛽️ " +
+                                                update.gasUsed +
+                                                "/" +
+                                                (update.gasLimit || update.gas) +
+                                                " @ " +
+                                                parseFloat(update.gasPrice) / 1000000000 +
+                                                " gwei",
+                                            );
+                                        }
+                                    });
+                                    console.log("awaiting metamask/web3 confirm result.", result);
+                                    console.log(await result);
+                                }}
+                            >
+                                Withdraw!
+                            </Button> */}
+                            <br /><br />*Claiming is not available until the game ends, and these values are subject to change.
+                        </div>
+                        <br />
                         <Button
-                            disabled={this.state.greenNumberToClaim == 0 || this.state.greenNumberToClaim > this.state.greenBalance}
+                            disabled={true}
                             style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.greenNumberToClaim, 1), update => {
+                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake([this.props.orangeBalance, this.props.greenBalance, this.props.redBalance, this.props.blueBalance, this.props.purpleBalance, this.props.pinkBalance]), update => {
                                     console.log("📡 Transaction Update:", update);
                                     if (update && (update.status === "confirmed" || update.status === 1)) {
                                         console.log(" 🍾 Transaction " + update.hash + " finished!");
@@ -143,178 +150,19 @@ class Claim extends React.Component {
                                         );
                                     }
                                 });
-                                console.log("awaiting metamask/web3 confirm result...", result);
+                                console.log("awaiting metamask/web3 confirm result.", result);
                                 console.log(await result);
-                                this.setState({ greenBalance: ".." });
-                                this.fetchGreenBalance();
                             }}
                         >
-                            Claim Using {this.state.greenNumberToClaim} <span style={{ color: "green" }}>&#11044;</span>!
+                            Claim!
                         </Button>
-                        {this.state.greenBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "red" }}>&#11044;</span> is worth 16.66% more than 5 <span style={{ color: "green" }}>&#11044;</span></div>}
+
                     </div>
-                    <Divider />
-                    <div style={{ margin: 8 }}>
-                        Red Balance: {" "}
-                        {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span><br />
-                        {this.state.redBalance} <span style={{ color: "red" }}>&#11044;</span> = {(this.state.redBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.redBalance * 25) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.7 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
-                        <InputNumber
-                            min={0} max={1000000} defaultValue={0}
-                            onChange={e => {
-                                this.setState({ redNumberToClaim: e });
-                            }}
-                        />
-                        <Button
-                            disabled={this.state.redNumberToClaim == 0 || this.state.redNumberToClaim > this.state.redBalance}
-                            style={{ marginTop: 8, marginLeft: 8 }}
-                            onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.redNumberToClaim, 2), update => {
-                                    console.log("📡 Transaction Update:", update);
-                                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                                        console.log(
-                                            " ⛽️ " +
-                                            update.gasUsed +
-                                            "/" +
-                                            (update.gasLimit || update.gas) +
-                                            " @ " +
-                                            parseFloat(update.gasPrice) / 1000000000 +
-                                            " gwei",
-                                        );
-                                    }
-                                });
-                                console.log("awaiting metamask/web3 confirm result...", result);
-                                console.log(await result);
-                                this.setState({ redBalance: ".." });
-                                this.fetchRedBalance();
-                            }}
-                        >
-                            Claim Using {this.state.redNumberToClaim} <span style={{ color: "red" }}>&#11044;</span>!
-                        </Button>
-                        {this.state.redBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "blue" }}>&#11044;</span> is worth 14.29% more than 5 <span style={{ color: "red" }}>&#11044;</span></div>}
-                    </div>
-                    <Divider />
-                    <div style={{ margin: 8 }}>
-                        Blue Balance: {" "}
-                        {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span><br />
-                        {this.state.blueBalance} <span style={{ color: "blue" }}>&#11044;</span> = {(this.state.blueBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.blueBalance * 125) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.8 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
-                        <InputNumber
-                            min={0} max={1000000} defaultValue={0}
-                            onChange={e => {
-                                this.setState({ blueNumberToClaim: e });
-                            }}
-                        />
-                        <Button
-                            disabled={this.state.blueNumberToClaim == 0 || this.state.blueNumberToClaim > this.state.blueBalance}
-                            style={{ marginTop: 8, marginLeft: 8 }}
-                            onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.blueNumberToClaim, 3), update => {
-                                    console.log("📡 Transaction Update:", update);
-                                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                                        console.log(
-                                            " ⛽️ " +
-                                            update.gasUsed +
-                                            "/" +
-                                            (update.gasLimit || update.gas) +
-                                            " @ " +
-                                            parseFloat(update.gasPrice) / 1000000000 +
-                                            " gwei",
-                                        );
-                                    }
-                                });
-                                console.log("awaiting metamask/web3 confirm result...", result);
-                                console.log(await result);
-                                this.setState({ blueBalance: ".." });
-                                this.fetchBlueBalance();
-                            }}
-                        >
-                            Claim Using {this.state.blueNumberToClaim} <span style={{ color: "blue" }}>&#11044;</span>!
-                        </Button>
-                        {this.state.blueBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "purple" }}>&#11044;</span> is worth 12.5% more than 5 <span style={{ color: "blue" }}>&#11044;</span></div>}
-                    </div>
-                    <Divider />
-                    <div style={{ margin: 8 }}>
-                        Purple Balance: {" "}
-                        {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span><br />
-                        {this.state.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span> = {(this.state.purpleBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.purpleBalance * 625) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 0.9 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
-                        <InputNumber
-                            min={0} max={1000000} defaultValue={0}
-                            onChange={e => {
-                                this.setState({ purpleNumberToClaim: e });
-                            }}
-                        />
-                        <Button
-                            disabled={this.state.purpleNumberToClaim == 0 || this.state.purpleNumberToClaim > this.state.purpleBalance}
-                            style={{ marginTop: 8, marginLeft: 8 }}
-                            onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.purpleNumberToClaim, 4), update => {
-                                    console.log("📡 Transaction Update:", update);
-                                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                                        console.log(
-                                            " ⛽️ " +
-                                            update.gasUsed +
-                                            "/" +
-                                            (update.gasLimit || update.gas) +
-                                            " @ " +
-                                            parseFloat(update.gasPrice) / 1000000000 +
-                                            " gwei",
-                                        );
-                                    }
-                                });
-                                console.log("awaiting metamask/web3 confirm result...", result);
-                                console.log(await result);
-                                this.setState({ purpleBalance: ".." });
-                                this.fetchPurpleBalance();
-                            }}
-                        >
-                            Claim Using {this.state.purpleNumberToClaim} <span style={{ color: "purple" }}>&#11044;</span>!
-                        </Button>
-                        {this.state.purpleBalance >= 5 && <div><br />Note: You are eligible to upgrade<br />1 <span style={{ color: "pink" }}>&#11044;</span> is worth 11.11% more than 5 <span style={{ color: "purple" }}>&#11044;</span></div>}
-                    </div>
-                    <Divider />
-                    <div style={{ margin: 8 }}>
-                        Pink Balance: {" "}
-                        {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span><br />
-                        {this.state.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span> = {(this.state.pinkBalance && this.props.potBalance && this.props.numMinted && this.props.numBurned) ? ((this.state.pinkBalance * 3125) / (this.props.numMinted.toNumber() - this.props.numBurned.toNumber())) * 1 * utils.formatEther(this.props.potBalance) : "..."} ETH<br />
-                        <InputNumber
-                            min={0} max={1000000} defaultValue={0}
-                            onChange={e => {
-                                this.setState({ pinkNumberToClaim: e });
-                            }}
-                        />
-                        <Button
-                            disabled={this.state.pinkNumberToClaim == 0 || this.state.pinkNumberToClaim > this.state.pinkBalance}
-                            style={{ marginTop: 8, marginLeft: 8 }}
-                            onClick={async () => {
-                                const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake(this.state.pinkNumberToClaim, 5), update => {
-                                    console.log("📡 Transaction Update:", update);
-                                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                                        console.log(
-                                            " ⛽️ " +
-                                            update.gasUsed +
-                                            "/" +
-                                            (update.gasLimit || update.gas) +
-                                            " @ " +
-                                            parseFloat(update.gasPrice) / 1000000000 +
-                                            " gwei",
-                                        );
-                                    }
-                                });
-                                console.log("awaiting metamask/web3 confirm result...", result);
-                                console.log(await result);
-                                this.setState({ pinkBalance: ".." });
-                                this.fetchPinkBalance();
-                            }}
-                        >
-                            Claim Using {this.state.pinkNumberToClaim} <span style={{ color: "pink" }}>&#11044;</span>!
-                        </Button>
-                        {this.state.pinkBalance >= 5 && <div><br />Note: You are eligible to upgrade</div>}
-                    </div>
-                    <Divider />
+
                 </div>
+                <br />
+                <br />
+                <br />
             </div >
         );
     }
