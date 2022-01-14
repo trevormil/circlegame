@@ -105,7 +105,7 @@ function Home() {
                 &emsp;-Note that due to increasing mint prices and royalties over time, accumulating earlier in the game is more beneficial than later. <br />
                 -The player with the rarest set of tokens at the end will get to donate 5% of the pot to a web3 cause (DAO, grants, etc.) of their choice.<br />
                 -The final 5% will go towards developer payments, server costs, and bug bounties.<br />
-                -The Circle Game DAO also plans to launch after the game concludes. 50% of tokens will be allocated to those who burned their {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
+                -The Circle Game DAO also plans to launch after the game concludes. 50,000,000 out of the 100,000,000 tokens will be allocated to those who burned their {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "red" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "blue" }}>&#11044;</span>{" "}
                 {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}

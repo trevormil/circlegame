@@ -39,7 +39,6 @@ class Claim extends React.Component {
                         {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "}</h2>
                     <br />
                     Claim Values (if game ended now):<br />
-                    {console.log(this.getTotalAdjustedTokens())}
                     1 <span style={{ color: "orange" }}>&#11044;</span> = {this.props.numMinted >= 1 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((1 * 1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
                     1 <span style={{ color: "green" }}>&#11044;</span> = {this.props.numMinted >= 5 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((5 * 1.1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
                     1 <span style={{ color: "red" }}>&#11044;</span> = {this.props.numMinted >= 25 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((25 * 1.2) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
@@ -58,7 +57,6 @@ class Claim extends React.Component {
                             {this.props.purpleBalance} <span style={{ color: "purple" }}>&#11044;</span>{"  "}
                             {this.props.pinkBalance} <span style={{ color: "pink" }}>&#11044;</span>
                             <br />
-                            {console.log(this.props.adjustedNumberOfTokens)}
                             <br />
                             Claimable Amount: <br />
                             <b>{

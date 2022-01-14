@@ -35,8 +35,6 @@ class Mint extends React.Component {
             }
         }
 
-        { console.log(mintTotal) }
-
         return (
             <div>
                 <div style={{ border: "3px solid #cccccc", borderRadius: 4, padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>

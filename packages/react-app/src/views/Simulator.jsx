@@ -36,7 +36,6 @@ const Performer = {
 }
 
 function getBalances(currBalances) {
-    console.log(currBalances);
     for (let i = 0; i < 6; i++) {
         if (i < 5 && currBalances[i] >= 5) {
             let numNextTier = Math.floor(currBalances[i] / 5);
@@ -47,7 +46,7 @@ function getBalances(currBalances) {
     return currBalances;
 }
 
-function Simulator({ potBalance, numMinted, numBurned }) {
+function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, totalGreenBalance, totalRedBalance, totalBlueBalance, totalPurpleBalance, totalPinkBalance }) {
     const [yourBalances, setBalances] = useState([0, 0, 0, 0, 0, 0]);
 
     const [b_potBalance, setB_PotBalance] = useState(0);
@@ -184,7 +183,7 @@ function Simulator({ potBalance, numMinted, numBurned }) {
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>🛠</span>
                 <b>Simulation Tool</b><br />
-                Explore how minting, upgrading, and collecting royalties alter the claim values and token allocations.
+                Explore how minting, upgrading, and collecting royalties alter one's claim values and token allocations.
                 <br /><br />
                 <b>Perform Actions</b>
                 <div>
@@ -282,7 +281,7 @@ function Simulator({ potBalance, numMinted, numBurned }) {
                             setA_Actions([]);
                             setD_Actions([]);
                             recalculate([[Performer.Other, Action.Mint, numMinted], royalties], [], []);
-                            setOtherPlayersBalances([numMinted, 0, 0, 0, 0, 0])
+                            setOtherPlayersBalances([totalOrangeBalance, totalGreenBalance, totalRedBalance, totalBlueBalance, totalPurpleBalance, totalPinkBalance])
                         }}
                     >
                         Reset to Current Pot's State
@@ -478,17 +477,17 @@ function Simulator({ potBalance, numMinted, numBurned }) {
 
                         {" "}ETH)</b>. You will also be allocated <b>{
                             getTotalAdjustedTokens() != 0 ?
-                                Number((
+                                Number(Math.floor((
                                     (yourBalances[0] * 1 * 1) +
                                     (yourBalances[1] * 5 * 1.1) +
                                     (yourBalances[2] * 25 * 1.2) +
                                     (yourBalances[3] * 125 * 1.3) +
                                     (yourBalances[4] * 625 * 1.4) +
                                     (yourBalances[5] * 3125 * 1.5)
-                                ) / getTotalAdjustedTokens() * 100 * 0.5).toFixed(2)
+                                ) / getTotalAdjustedTokens() * 50000000)).toLocaleString()
                                 :
                                 0
-                        }%</b> of the Circle Game DAO tokens.
+                        }</b> Circle Game DAO tokens.
 
 
                 </div>

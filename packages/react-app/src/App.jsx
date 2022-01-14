@@ -245,6 +245,12 @@ function App(props) {
                         numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
                         potBalance={details[0]}
                         mintPrice={details[1]}
+                        totalOrangeBalance={details[8]}
+                        totalGreenBalance={details[9]}
+                        totalRedBalance={details[10]}
+                        totalBlueBalance={details[11]}
+                        totalPurpleBalance={details[12]}
+                        totalPinkBalance={details[13]}
                     />
                 </Route>
                 <Route exact path="/mint">
