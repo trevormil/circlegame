@@ -141,7 +141,7 @@ function App(props) {
     // If you want to make 🔐 write transactions to your contracts, use the userSigner:
     const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
-    const currDetails = useContractReader(readContracts, "CircleGame", "getDetails", [address]);
+    const currDetails = useContractReader(readContracts, "CircleGame", "getDetails", [address ? address : "0x0000000000000000000000000000000000000000"]);
 
     let details = currDetails ? [...currDetails] : [0, 1000000000000000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     if (currDetails) {

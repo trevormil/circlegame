@@ -13,7 +13,7 @@ const content = (
                 <WechatFilled style={{ fontSize: 24 }} />
                 {" Discord"}
             </a>
-            <a className="example-link" href="" target="_blank">
+            <a className="example-link" href="https://testnets.opensea.io/collection/circlegamenft" target="_blank">
                 <ShoppingCartOutlined style={{ fontSize: 24 }} />
                 {" OpenSea"}
             </a>
@@ -21,7 +21,7 @@ const content = (
                 <GithubFilled style={{ fontSize: 24 }} />
                 {" GitHub"}
             </a>
-            <a className="example-link" href="" target="_blank">
+            <a className="example-link" href="https://rinkeby.etherscan.io/address/0xa0B8b6C5f57cc0C460f9b209449216b40C8A06Ea" target="_blank">
                 <ToolFilled style={{ fontSize: 24 }} />
                 {" Etherscan"}
             </a>

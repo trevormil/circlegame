@@ -11,7 +11,7 @@ function truncate(str, maxDecimalDigits) {
 
 export default function Header({ potBalance }) {
     return (
-        <a href="https://github.com/CircleGame" target="_blank" rel="noopener noreferrer">
+        <a href="https://circlegame.io" target="_blank" rel="noopener noreferrer">
             <PageHeader
                 title={"Circle Game (Current Pot: " + truncate(utils.formatEther(potBalance), 5) + " ETH)"}
                 subTitle="An NFT experiment on risk, scarcity, and game theory."

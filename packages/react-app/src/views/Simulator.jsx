@@ -173,7 +173,7 @@ function Simulator({ potBalance, numMinted, numBurned }) {
 
     const getTotalAdjustedTokens = () => {
         let total = 0;
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i <= 5; i++) {
             total += (otherPlayersBalances[i] + yourBalances[i]) * (1 + 0.1 * i) * (5 ** i);
         }
         return total;
@@ -203,7 +203,7 @@ function Simulator({ potBalance, numMinted, numBurned }) {
                             setA_NumToMint(0);
                         }}
                     >
-                        <>You Mint {otherPlayers_numToMint}{" "}<span style={{ color: "orange" }}> &#11044; </span></>
+                        <>You Mint {otherPlayers_numToMint}{" "}<span style={{ color: "orange" }}> &#11044; </span> for {truncate("" + Number((((otherPlayers_numToMint - 1) / 2) * otherPlayers_numToMint * 0.00001) + Number((b_numMinted * 0.00001 + 0.001) * otherPlayers_numToMint)), 5)} ETH</>
                     </Button>
                     <InputNumber
                         min={0} defaultValue={0}
@@ -223,7 +223,7 @@ function Simulator({ potBalance, numMinted, numBurned }) {
                             setB_NumToMint(0);
                         }}
                     >
-                        <>Other Players Mint {b_numToMint}{" "}<span style={{ color: "orange" }}> &#11044; </span></>
+                        <>Other Players Mint {b_numToMint}{" "}<span style={{ color: "orange" }}> &#11044; </span> for {truncate("" + Number((((b_numToMint - 1) / 2) * b_numToMint * 0.00001) + Number((b_numMinted * 0.00001 + 0.001) * b_numToMint)), 5)} ETH</>
                     </Button>
                     <InputNumber
                         min={0} defaultValue={0}
@@ -507,12 +507,12 @@ function Simulator({ potBalance, numMinted, numBurned }) {
                         Current <span style={{ color: "orange" }}>&#11044;</span> Mint Cost: {truncate("" + getStartingMintCost(b_numMinted), 6)} ETH<br />
                         <br />
                         <b>Claim Values:</b> <br />
-                        1 <span style={{ color: "orange" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 5 ? truncate("" + (1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "green" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 5 ? truncate("" + (5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "red" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 25 ? truncate("" + (25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "blue" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 125 ? truncate("" + (125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "purple" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 625 ? truncate("" + (625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "pink" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && ((b_numMinted)) >= 3125 ? truncate("" + (3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "orange" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[0] + otherPlayersBalances[0]) > 0 ? truncate("" + (1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "green" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[1] + otherPlayersBalances[1]) > 0 ? truncate("" + (5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "red" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[2] + otherPlayersBalances[2]) > 0 ? truncate("" + (25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "blue" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[3] + otherPlayersBalances[3]) > 0 ? truncate("" + (125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "purple" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[4] + otherPlayersBalances[4]) > 0 ? truncate("" + (625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
+                        1 <span style={{ color: "pink" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[5] + otherPlayersBalances[5]) > 0 ? truncate("" + (3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
                         <br />
                     </div>
 
