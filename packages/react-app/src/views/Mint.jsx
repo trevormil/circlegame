@@ -1,9 +1,9 @@
 import { utils } from "ethers";
-import { Button, Divider, InputNumber } from "antd";
+import { Alert, Button, Divider, InputNumber } from "antd";
 import React from "react";
 
 function truncate(str, maxDecimalDigits) {
-    return "" +  parseFloat(Number(str).toFixed(maxDecimalDigits));
+    return "" + parseFloat(Number(str).toFixed(maxDecimalDigits));
 }
 
 class Mint extends React.Component {
@@ -37,6 +37,15 @@ class Mint extends React.Component {
 
         return (
             <div>
+                {!this.props.address &&
+
+                    <Alert
+                        message="Wallet Not Connected"
+                        description="To interact with this page, you must connect your wallet via the Connect button in the top right."
+                        type="warning"
+                        closable
+                    />
+                }
                 <div style={{ border: "3px solid #cccccc", borderRadius: 4, padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Mint <span style={{ color: "orange" }}>&#11044;</span></h2>
                     <Divider />
@@ -54,7 +63,7 @@ class Mint extends React.Component {
                             }}
                         />
                         <Button
-                            disabled={this.state.numberToMint == 0}
+                            disabled={!this.props.address || this.state.numberToMint == 0}
                             style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.mint(this.props.address, 0, this.state.numberToMint, { value: utils.parseEther(truncate(mintTotal + "", 8)) }), update => {

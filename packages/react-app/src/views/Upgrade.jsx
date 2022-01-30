@@ -1,4 +1,4 @@
-import { Button, Divider, InputNumber } from "antd";
+import { Alert, Button, Divider, InputNumber } from "antd";
 import React from "react";
 import { utils } from "ethers";
 
@@ -30,6 +30,15 @@ class Upgrade extends React.Component {
 
         return (
             <div>
+                {!this.props.address &&
+
+                    <Alert
+                        message="Wallet Not Connected"
+                        description="To interact with this page, you must connect your wallet via the Connect button in the top right."
+                        type="warning"
+                        closable
+                    />
+                }
                 <div style={{ border: "3px solid #cccccc", borderRadius: 4, padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Upgrade
                         {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}

@@ -1,5 +1,5 @@
 import { utils } from "ethers";
-import { Button, Divider, InputNumber } from "antd";
+import { Alert, Button, Divider, InputNumber } from "antd";
 import React from "react";
 
 function truncate(str, maxDecimalDigits) {
@@ -29,6 +29,15 @@ class Claim extends React.Component {
     render() {
         return (
             <div>
+                {!this.props.address &&
+
+                    <Alert
+                        message="Wallet Not Connected"
+                        description="To interact with this page, you must connect your wallet via the Connect button in the top right."
+                        type="warning"
+                        closable
+                    />
+                }
                 <div style={{ border: "3px solid #cccccc", borderRadius: 4, padding: 16, width: 400, margin: "auto", marginTop: 32, fontSize: 16 }}>
                     <h2>Claim
                         {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
@@ -39,12 +48,12 @@ class Claim extends React.Component {
                         {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "}</h2>
                     <br />
                     Claim Values (if game ended now):<br />
-                    1 <span style={{ color: "orange" }}>&#11044;</span> = {this.props.numMinted >= 1 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((1 * 1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
-                    1 <span style={{ color: "green" }}>&#11044;</span> = {this.props.numMinted >= 5 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((5 * 1.1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
-                    1 <span style={{ color: "red" }}>&#11044;</span> = {this.props.numMinted >= 25 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((25 * 1.2) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
-                    1 <span style={{ color: "blue" }}>&#11044;</span> = {this.props.numMinted >= 125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((125 * 1.3) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
-                    1 <span style={{ color: "purple" }}>&#11044;</span> = {this.props.numMinted >= 625 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((625 * 1.4) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
-                    1 <span style={{ color: "pink" }}>&#11044;</span> = {this.props.numMinted >= 3125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((3125 * 1.5) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH" : "N/A"}<br />
+                    1 <span style={{ color: "orange" }}>&#11044;</span> = {this.props.numMinted >= 1 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((1 * 1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((1 * 1)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                    1 <span style={{ color: "green" }}>&#11044;</span> = {this.props.numMinted >= 5 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((5 * 1.1) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((5 * 1.1)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                    1 <span style={{ color: "red" }}>&#11044;</span> = {this.props.numMinted >= 25 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((25 * 1.2) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((25 * 1.2)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                    1 <span style={{ color: "blue" }}>&#11044;</span> = {this.props.numMinted >= 125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((125 * 1.3) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((125 * 1.3)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                    1 <span style={{ color: "purple" }}>&#11044;</span> = {this.props.numMinted >= 625 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((625 * 1.4) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((625 * 1.4)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                    1 <span style={{ color: "pink" }}>&#11044;</span> = {this.props.numMinted >= 3125 && this.getTotalAdjustedTokens() > 0 ? truncate("" + ((3125 * 1.5) / (this.getTotalAdjustedTokens()) * (utils.formatEther(this.props.potBalance) * 0.9)), 6) + " ETH + " + Number(Math.floor(((3125 * 1.5)) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
 
                     <Divider />
                     <div style={{ margin: 8 }}>
@@ -75,7 +84,19 @@ class Claim extends React.Component {
                                     )
                                     :
                                     0
-                            } ETH
+                            } ETH + {
+                                    this.getTotalAdjustedTokens() != 0 ?
+                                        Number(Math.floor((
+                                            (this.props.orangeBalance * 1 * 1) +
+                                            (this.props.greenBalance * 5 * 1.1) +
+                                            (this.props.redBalance * 25 * 1.2) +
+                                            (this.props.blueBalance * 125 * 1.3) +
+                                            (this.props.purpleBalance * 625 * 1.4) +
+                                            (this.props.pinkBalance * 3125 * 1.5)
+                                        ) / this.getTotalAdjustedTokens() * 50000000)).toLocaleString()
+                                        :
+                                        0
+                                } DAO tokens
                             </b>
                             {/*
                             <Button
@@ -130,7 +151,7 @@ class Claim extends React.Component {
                         </div>
                         <br />
                         <Button
-                            disabled={true}
+                            disabled={true || !this.props.address}
                             style={{ marginTop: 8, marginLeft: 8 }}
                             onClick={async () => {
                                 const result = this.props.tx(this.props.writeContracts.CircleGame.claimStake([this.props.orangeBalance, this.props.greenBalance, this.props.redBalance, this.props.blueBalance, this.props.purpleBalance, this.props.pinkBalance]), update => {

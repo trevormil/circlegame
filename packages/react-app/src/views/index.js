@@ -5,3 +5,4 @@ export { default as Claim } from "./Claim";
 export { default as Stats } from "./Stats";
 export { default as Advanced } from "./Advanced";
 export { default as Simulator } from "./Simulator";
+export { default as Rules } from "./Rules";

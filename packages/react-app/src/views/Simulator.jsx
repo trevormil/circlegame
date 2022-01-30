@@ -105,9 +105,9 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                     you_numMinted += action[2];
                     you_spent += totalCost;
                 }
-                actionsStrs.push(<>{`${action[0]} minted ${action[2]} `} <span style={{ color: "orange" }}>&#11044;</span> {` for a total cost of ${truncate("" + totalCost, 6)} ETH (${truncate("" + (totalCost / action[2]), 6)} ETH avg.)`}</>);
+                actionsStrs.push(<>{`${action[0]} minted ${action[2]} `} <span style={{ color: "orange" }}>&#11044;</span> {` for ${truncate("" + totalCost, 6)} ETH (${truncate("" + (totalCost / action[2]), 6)} ETH avg.)`}</>);
             } else if (action[1] == Action.Sell) {
-                actionsStrs.push(`Collected ${truncate("" + action[2], 6)} ETH in royalties at 2.5% per sale`);
+                actionsStrs.push(`Collected ${truncate("" + action[2], 6)} ETH in royalties`);
                 potBalance += action[2];
                 royalties += action[2];
             } else if (action[1] == Action.Claim) {
@@ -183,9 +183,9 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
             <div style={{ margin: 32 }}>
                 <span style={{ marginRight: 8 }}>🛠</span>
                 <b>Simulation Tool</b><br />
-                Explore how minting, upgrading, and collecting royalties alter one's claim values and token allocations.
+                Simulate minting, upgrading, and collecting royalties to explore how each action alters the pot, claim values, and DAO token allocations.
                 <br /><br />
-                <b>Perform Actions</b>
+                <b>Minting</b>
                 <div>
                     <InputNumber
                         min={0} defaultValue={0}
@@ -224,6 +224,10 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                     >
                         <>Other Players Mint {b_numToMint}{" "}<span style={{ color: "orange" }}> &#11044; </span> for {truncate("" + Number((((b_numToMint - 1) / 2) * b_numToMint * 0.00001) + Number((b_numMinted * 0.00001 + 0.001) * b_numToMint)), 5)} ETH</>
                     </Button>
+                </div>
+                <br />
+                <b>Royalties</b>
+                <div>
                     <InputNumber
                         min={0} defaultValue={0}
                         step={0.1}
@@ -232,6 +236,7 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                             setB_NumRoyaltiesToCollect(e);
                         }} />
                     <Button
+                        disabled={b_numRoyaltiesToCollect == 0}
                         style={{ marginRight: 10 }}
                         onClick={async () => {
                             setB_Actions([...b_actions, [Performer.Other, Action.Sell, b_numRoyaltiesToCollect]])
@@ -241,52 +246,8 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                     >
                         Collect {b_numRoyaltiesToCollect} ETH in Royalties
                     </Button>
-                    <br />
-                    <br />
-                    <Button
-                        style={{ marginRight: 10 }}
-                        onClick={async () => {
-                            let newActions = [...b_actions];
-                            newActions.splice(-1, 1);
-                            setB_Actions(newActions)
-                            recalculate(newActions, [], []);
-                        }}
-                    >
-                        Undo Last
-                    </Button>
-                    <Button
-                        style={{ marginRight: 10 }}
-                        onClick={async () => {
-                            setDefaultParams([0, 0, 0, 0, [0, 0, 0, 0, 0, 0], 0, 0, 0, 0]);
-                            setB_Actions([])
-                            setA_Actions([]);
-                            setD_Actions([]);
-                            recalculate([], [], [], [0, 0, 0, 0, [0, 0, 0, 0, 0, 0], 0, 0, 0, 0]);
-                            setOtherPlayersBalances([0, 0, 0, 0, 0, 0])
-                        }}
-
-                    >
-                        Reset
-                    </Button>
-                    <Button
-                        style={{ marginRight: 10 }}
-                        onClick={async () => {
-                            const totalCost = Number((((numMinted - 1) / 2) * numMinted * 0.00001) + Number((0 * 0.00001 + 0.001) * numMinted));
-                            let royalties = []
-                            if (utils.formatEther(potBalance) > totalCost) {
-                                royalties = [Performer.Other, Action.Sell, utils.formatEther(potBalance) - totalCost];
-                            }
-
-                            setB_Actions([[Performer.Other, Action.Mint, numMinted], royalties]);
-                            setA_Actions([]);
-                            setD_Actions([]);
-                            recalculate([[Performer.Other, Action.Mint, numMinted], royalties], [], []);
-                            setOtherPlayersBalances([totalOrangeBalance, totalGreenBalance, totalRedBalance, totalBlueBalance, totalPurpleBalance, totalPinkBalance])
-                        }}
-                    >
-                        Reset to Current Pot's State
-                    </Button>
                 </div>
+
                 <br />
                 <b>How are the other players' {b_numMinted - you_numMinted} <span style={{ color: "orange" }}>&#11044; </span> distributed?</b>
                 <div>
@@ -394,6 +355,7 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                         min={0} defaultValue={0}
                         value={otherPlayersBalances[5]}
                         onChange={newBalance => {
+
                             let otherBalances = [...otherPlayersBalances];
                             let prevBalance = otherPlayersBalances[5];
                             if (prevBalance - newBalance > 0) {
@@ -414,6 +376,8 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                     <br />
                     <br />
                     <Button
+                        disabled={b_numMinted - you_numMinted < 5}
+                        size="middle"
                         style={{ marginRight: 10 }}
                         onClick={async () => {
                             setOtherPlayersBalances(getBalances([b_numMinted - you_numMinted, 0, 0, 0, 0, 0]))
@@ -422,6 +386,8 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                         Fully Upgrade All
                     </Button>
                     <Button
+                        disabled={b_numMinted - you_numMinted < 5}
+                        size="middle"
                         style={{ marginRight: 10 }}
                         onClick={async () => {
                             setOtherPlayersBalances([b_numMinted - you_numMinted, 0, 0, 0, 0, 0])
@@ -431,51 +397,117 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                     </Button>
                 </div>
                 <br />
-                <b>Balances</b>
-                <div>
+                <br />
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{
+                        position: "relative", minHeight: "150px", width: "40%", border: "3px solid #cccccc", borderRadius: 4, padding: 10
+                    }}>
+                        <b>Actions Taken (in order): </b><br />
+                        {b_actionsStr.length > 0 ? b_actionsStr.map(actionStr => <div>-{actionStr}</div>) : ""}
+                        <br />
+                        <br />
+                        <div style={{
+                            position: "absolute", bottom: 10,
+                            display: "flex", justifyContent: "space-evenly", width: "100%"
+                        }}>
+                            <Button
+                                style={{ marginRight: 10 }}
+                                onClick={async () => {
+                                    let newActions = [...b_actions];
+                                    newActions.splice(-1, 1);
+                                    setB_Actions(newActions)
+                                    recalculate(newActions, [], []);
+                                    if (newActions.length == 0) {
+                                        setOtherPlayersBalances([0, 0, 0, 0, 0, 0])
+                                    }
+                                }}
+                            >
+                                Undo Last
+                            </Button>
+                            <Button
+                                style={{ marginRight: 10 }}
+                                onClick={async () => {
+                                    setDefaultParams([0, 0, 0, 0, [0, 0, 0, 0, 0, 0], 0, 0, 0, 0]);
+                                    setB_Actions([])
+                                    setA_Actions([]);
+                                    setD_Actions([]);
+                                    recalculate([], [], [], [0, 0, 0, 0, [0, 0, 0, 0, 0, 0], 0, 0, 0, 0]);
+                                    setOtherPlayersBalances([0, 0, 0, 0, 0, 0])
+                                }}
 
-                    Your Balances:{" "}
-                    {yourBalances[0]} <span style={{ color: "orange" }}>&#11044; </span>
-                    {yourBalances[1]} <span style={{ color: "green" }}>&#11044; </span>
-                    {yourBalances[2]} <span style={{ color: "red" }}>&#11044; </span>
-                    {yourBalances[3]} <span style={{ color: "blue" }}>&#11044; </span>
-                    {yourBalances[4]} <span style={{ color: "purple" }}>&#11044; </span>
-                    {yourBalances[5]} <span style={{ color: "pink" }}>&#11044; </span> (fully upgraded)
-                    <br />
-                    Total Balances:{" "}
-                    {yourBalances[0] + otherPlayersBalances[0]} <span style={{ color: "orange" }}>&#11044; </span>
-                    {yourBalances[1] + otherPlayersBalances[1]} <span style={{ color: "green" }}>&#11044; </span>
-                    {yourBalances[2] + otherPlayersBalances[2]} <span style={{ color: "red" }}>&#11044; </span>
-                    {yourBalances[3] + otherPlayersBalances[3]} <span style={{ color: "blue" }}>&#11044; </span>
-                    {yourBalances[4] + otherPlayersBalances[4]} <span style={{ color: "purple" }}>&#11044; </span>
-                    {yourBalances[5] + otherPlayersBalances[5]} <span style={{ color: "pink" }}>&#11044; </span>
-                    <br />
+                            >
+                                Reset
+                            </Button>
+                            <Button
+                                style={{ marginRight: 10 }}
+                                onClick={async () => {
+                                    const totalCost = Number((((numMinted - 1) / 2) * numMinted * 0.00001) + Number((0 * 0.00001 + 0.001) * numMinted));
+                                    let royalties = []
+                                    if (utils.formatEther(potBalance) > totalCost) {
+                                        royalties = [Performer.Other, Action.Sell, utils.formatEther(potBalance) - totalCost];
+                                    }
 
-                    You have spent {truncate("" + you_spent, 6)} ETH and can claim {you_numMinted - you_numBurned > 0 ?
-                        truncate("" + Number(
-                            ((yourBalances[0] * 1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                            ((yourBalances[1] * 5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                            ((yourBalances[2] * 25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                            ((yourBalances[3] * 125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                            ((yourBalances[4] * 625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                            ((yourBalances[5] * 3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9))
-                        ), 6) : 0
-                    } ETH <b>(
-                        {
-                            you_numMinted - you_numBurned > 0 ?
-                                truncate("" + Number(
+                                    setB_Actions([[Performer.Other, Action.Mint, numMinted], royalties]);
+                                    setA_Actions([]);
+                                    setD_Actions([]);
+                                    recalculate([[Performer.Other, Action.Mint, numMinted], royalties], [], []);
+                                    setOtherPlayersBalances([totalOrangeBalance, totalGreenBalance, totalRedBalance, totalBlueBalance, totalPurpleBalance, totalPinkBalance])
+                                }}
+                            >
+                                Reset to Current Pot's State
+                            </Button>
+                        </div>
+                    </div>
+                    <div style={{ width: "26%", border: "3px solid #cccccc", borderRadius: 4, padding: 10 }}>
+                        <b>Current Pot:</b> <br />
+                        Balance: {truncate("" + b_potBalance, 6)} ETH<br />
+                        {yourBalances[0] + otherPlayersBalances[0]} <span style={{ color: "orange" }}>&#11044; </span>
+                        {yourBalances[1] + otherPlayersBalances[1]} <span style={{ color: "green" }}>&#11044; </span>
+                        {yourBalances[2] + otherPlayersBalances[2]} <span style={{ color: "red" }}>&#11044; </span>
+                        {yourBalances[3] + otherPlayersBalances[3]} <span style={{ color: "blue" }}>&#11044; </span>
+                        {yourBalances[4] + otherPlayersBalances[4]} <span style={{ color: "purple" }}>&#11044; </span>
+                        {yourBalances[5] + otherPlayersBalances[5]} <span style={{ color: "pink" }}>&#11044; </span>
+                        <br />
+                        <br />
+                        <b>Minting:</b> <br />
+                        Total <span style={{ color: "orange" }}>&#11044;</span> Minted: {b_numMinted}<br />
+                        Current <span style={{ color: "orange" }}>&#11044;</span> Mint Cost: {truncate("" + getStartingMintCost(b_numMinted), 6)} ETH<br />
+                        <br />
+                        <b>Claim Values:</b> <br />
+                        1 <span style={{ color: "orange" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[0] + otherPlayersBalances[0]) > 0 ? truncate("" + (1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((1 * 1)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        1 <span style={{ color: "green" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[1] + otherPlayersBalances[1]) > 0 ? truncate("" + (5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((5 * 1.1)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        1 <span style={{ color: "red" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[2] + otherPlayersBalances[2]) > 0 ? truncate("" + (25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((25 * 1.2)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        1 <span style={{ color: "blue" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[3] + otherPlayersBalances[3]) > 0 ? truncate("" + (125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((125 * 1.3)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        1 <span style={{ color: "purple" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[4] + otherPlayersBalances[4]) > 0 ? truncate("" + (625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((625 * 1.4)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        1 <span style={{ color: "pink" }}>&#11044;</span> = {((b_numMinted)) > 0 && (yourBalances[5] + otherPlayersBalances[5]) > 0 ? truncate("" + (3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH + " + Number(Math.floor(((3125 * 1.5)) / getTotalAdjustedTokens() * 50000000)).toLocaleString() + " DAO tokens" : "N/A"}<br />
+                        <br />
+                    </div>
+                    <div style={{ width: "26%", border: "3px solid #cccccc", borderRadius: 4, padding: 10 }}>
+                        <b>Your Circles:</b> <br />
+                        {yourBalances[0]} <span style={{ color: "orange" }}>&#11044; </span>
+                        {yourBalances[1]} <span style={{ color: "green" }}>&#11044; </span>
+                        {yourBalances[2]} <span style={{ color: "red" }}>&#11044; </span>
+                        {yourBalances[3]} <span style={{ color: "blue" }}>&#11044; </span>
+                        {yourBalances[4]} <span style={{ color: "purple" }}>&#11044; </span>
+                        {yourBalances[5]} <span style={{ color: "pink" }}>&#11044; </span> (fully upgraded)
+                        <br />
+                        <br />
 
-                                    ((yourBalances[0] * 1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                                    ((yourBalances[1] * 5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                                    ((yourBalances[2] * 25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                                    ((yourBalances[3] * 125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                                    ((yourBalances[4] * 625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
-                                    ((yourBalances[5] * 3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) -
-                                    you_spent
-                                ), 6) : 0
-                        }
-
-                        {" "}ETH)</b>. You will also be allocated <b>{
+                        <b>Your Purchases:</b> <br />
+                        Total Spent: {truncate("" + you_spent, 6)} ETH<br />
+                        <br />
+                        <b>Your Rewards:</b> <br />
+                        Claimable Amount: <b>{you_numMinted - you_numBurned > 0 ?
+                            truncate("" + Number(
+                                ((yourBalances[0] * 1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
+                                ((yourBalances[1] * 5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
+                                ((yourBalances[2] * 25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
+                                ((yourBalances[3] * 125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
+                                ((yourBalances[4] * 625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9)) +
+                                ((yourBalances[5] * 3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9))
+                            ), 6) : 0
+                        } ETH</b><br />
+                        Circle Game DAO Tokens: <b>{
                             getTotalAdjustedTokens() != 0 ?
                                 Number(Math.floor((
                                     (yourBalances[0] * 1 * 1) +
@@ -487,32 +519,7 @@ function Simulator({ potBalance, numMinted, numBurned, totalOrangeBalance, total
                                 ) / getTotalAdjustedTokens() * 50000000)).toLocaleString()
                                 :
                                 0
-                        }</b> Circle Game DAO tokens.
-
-
-                </div>
-                <br />
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ width: "48%", border: "3px solid #cccccc", borderRadius: 4, padding: 10 }}>
-                        <b>Actions Taken (in order): </b><br />
-                        {b_actionsStr.length > 0 ? b_actionsStr.map(actionStr => <div>-{actionStr}</div>) : ""}
-                    </div>
-                    <div style={{ width: "48%", border: "3px solid #cccccc", borderRadius: 4, padding: 10 }}>
-                        <b>Current Pot:</b> <br />
-                        Balance: {truncate("" + b_potBalance, 6)} ETH<br />
-                        <br />
-                        <b>Minting:</b> <br />
-                        Total <span style={{ color: "orange" }}>&#11044;</span> Minted: {b_numMinted}<br />
-                        Current <span style={{ color: "orange" }}>&#11044;</span> Mint Cost: {truncate("" + getStartingMintCost(b_numMinted), 6)} ETH<br />
-                        <br />
-                        <b>Claim Values:</b> <br />
-                        1 <span style={{ color: "orange" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[0] + otherPlayersBalances[0]) > 0 ? truncate("" + (1 * 1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "green" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[1] + otherPlayersBalances[1]) > 0 ? truncate("" + (5 * 1.1) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "red" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[2] + otherPlayersBalances[2]) > 0 ? truncate("" + (25 * 1.2) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "blue" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[3] + otherPlayersBalances[3]) > 0 ? truncate("" + (125 * 1.3) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "purple" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[4] + otherPlayersBalances[4]) > 0 ? truncate("" + (625 * 1.4) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        1 <span style={{ color: "pink" }}>&#11044;</span> can claim {((b_numMinted)) > 0 && (yourBalances[5] + otherPlayersBalances[5]) > 0 ? truncate("" + (3125 * 1.5) / (getTotalAdjustedTokens()) * (b_potBalance * 0.9), 6) + " ETH" : "N/A"}<br />
-                        <br />
+                        }</b>
                     </div>
 
 

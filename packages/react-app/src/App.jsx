@@ -1,4 +1,3 @@
-import { Menu } from "antd";
 import "antd/dist/antd.css";
 import {
     useBalance,
@@ -14,7 +13,7 @@ import { Link, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
 import {
     Account,
-    Header,
+    // Header,
     ThemeSwitch,
     NetworkSwitch,
 } from "./components";
@@ -23,11 +22,21 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, Mint, Upgrade, Claim, Stats, Advanced, Simulator } from "./views";
+import { Home, Mint, Upgrade, Claim, Stats, Advanced, Simulator, Rules } from "./views";
 import { useStaticJsonRPC } from "./hooks";
-import Footer from "./components/Footer";
+import PageFooter from "./components/Footer";
+import { Layout, Menu, PageHeader } from 'antd';
+import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import Leaderboard from "./views/Leaderboard";
+
+const { Header, Content, Footer, Sider } = Layout;
 
 const { ethers } = require("ethers");
+
+function truncate(str, maxDecimalDigits) {
+    return "" + parseFloat(Number(str).toFixed(maxDecimalDigits));
+}
+
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -72,7 +81,7 @@ function App(props) {
 
     const [injectedProvider, setInjectedProvider] = useState();
     const [address, setAddress] = useState();
-    const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[2]);
+    const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[1]);
     const location = useLocation();
 
     const targetNetwork = NETWORKS[selectedNetwork];
@@ -212,110 +221,179 @@ function App(props) {
 
     return (
         <div className="App">
-            {/* ✏️ Edit the header and change the title to your project name */}
-            <Header potBalance={details[0]} />
-            <Menu style={{ textAlign: "center", marginTop: 40, fontSize: 18 }} selectedKeys={[location.pathname]} mode="horizontal">
-                <Menu.Item key="/">
-                    <Link to="/">Home</Link>
-                </Menu.Item>
-                <Menu.Item key="/simulator" >
-                    <Link to="/simulator">Simulator</Link>
-                </Menu.Item>
-                <Menu.Item key="/mint" disabled={!address}>
-                    <Link to="/mint">Mint</Link>
-                </Menu.Item>
-                <Menu.Item key="/upgrade" disabled={!address}>
-                    <Link to="/upgrade">Upgrade</Link>
-                </Menu.Item>
-                <Menu.Item key="/claim" disabled={!address}>
-                    <Link to="/claim">Claim</Link>
-                </Menu.Item>
-            </Menu>
-
-            <Switch>
-                <Route exact path="/">
-                    <Home
-                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
-                        potBalance={details[0]}
-                        mintPrice={details[1]}
-                    />
-                </Route>
-                <Route exact path="/simulator">
-                    <Simulator
-                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
-                        potBalance={details[0]}
-                        mintPrice={details[1]}
-                        totalOrangeBalance={details[8]}
-                        totalGreenBalance={details[9]}
-                        totalRedBalance={details[10]}
-                        totalBlueBalance={details[11]}
-                        totalPurpleBalance={details[12]}
-                        totalPinkBalance={details[13]}
-                    />
-                </Route>
-                <Route exact path="/mint">
-                    <Mint
-                        address={address}
-                        tx={tx}
-                        readContracts={readContracts}
-                        writeContracts={writeContracts}
-                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
-                        mintPrice={details[1]}
-                        orangeBalance={details[2]}
-                        greenBalance={details[3]}
-                        redBalance={details[4]}
-                        blueBalance={details[5]}
-                        purpleBalance={details[6]}
-                        pinkBalance={details[7]}
-                        totalOrangeBalance={details[8]}
-                        totalGreenBalance={details[9]}
-                        totalRedBalance={details[10]}
-                        totalBlueBalance={details[11]}
-                        totalPurpleBalance={details[12]}
-                        totalPinkBalance={details[13]}
-                    />
-                </Route>
-                <Route exact path="/upgrade">
-                    <Upgrade
-                        address={address}
-                        tx={tx}
-                        writeContracts={writeContracts}
-                        readContracts={readContracts}
-                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
-                        potBalance={details[0]}
-                        orangeBalance={details[2]}
-                        greenBalance={details[3]}
-                        redBalance={details[4]}
-                        blueBalance={details[5]}
-                        purpleBalance={details[6]}
-                        pinkBalance={details[7]}
-                    />
-                </Route>
-                <Route exact path="/claim">
-                    <Claim
-                        address={address}
-                        tx={tx}
-                        writeContracts={writeContracts}
-                        readContracts={readContracts}
-                        numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
-                        potBalance={details[0]}
-                        orangeBalance={details[2]}
-                        greenBalance={details[3]}
-                        redBalance={details[4]}
-                        blueBalance={details[5]}
-                        purpleBalance={details[6]}
-                        pinkBalance={details[7]}
-                        // adjustedNumberOfTokens={adjustedNumberOfTokens}
-                        // claimableBalance={claimableBalance}
-                        totalOrangeBalance={details[8]}
-                        totalGreenBalance={details[9]}
-                        totalRedBalance={details[10]}
-                        totalBlueBalance={details[11]}
-                        totalPurpleBalance={details[12]}
-                        totalPinkBalance={details[13]}
-                    />
-                </Route>
-                {/* <Route exact path="/stats">
+            <Layout>
+                <Sider
+                    breakpoint="lg"
+                    collapsedWidth="0"
+                    onBreakpoint={broken => {
+                        console.log(broken);
+                    }}
+                    onCollapse={(collapsed, type) => {
+                        console.log(collapsed, type);
+                    }}
+                    style={{
+                        minHeight: "100%"
+                    }}
+                    theme="dark"
+                >
+                    <div className="logo" style={{
+                        'height': '32px',
+                        'margin': '16px',
+                        fontSize: 22
+                    }}>
+                        {" "}<span style={{ color: "orange" }}>&#11044;</span>{" "}
+                        {" "}<span style={{ color: "green" }}>&#11044;</span>{" "}
+                        {" "}<span style={{ color: "red" }}>&#11044;</span>{" "}
+                        {" "}<span style={{ color: "blue" }}>&#11044;</span>{" "}
+                        {" "}<span style={{ color: "purple" }}>&#11044;</span>{" "}
+                        {" "}<span style={{ color: "pink" }}>&#11044;</span>{" "}
+                    </div>
+                    <Menu theme="dark" mode="inline" selectedKeys={[window.location.pathname]}>
+                        <Menu.Item key="/">
+                            <Link to="/">Home</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/mint" >
+                            <Link to="/mint">Mint</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/upgrade">
+                            <Link to="/upgrade">Upgrade</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/claim">
+                            <Link to="/claim">Claim</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/leaderboard">
+                            <Link to="/leaderboard">Leaderboard</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/simulator" >
+                            <Link to="/simulator">Simulator</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/opensea">
+                            <a href="https://opensea.io/collection/circlegamenft" target="_blank">OpenSea ↗</a>
+                        </Menu.Item>
+                        <Menu.Item key="/discord">
+                            <a href="https://discord.gg/ASCuCh5sz4" target="_blank">Discord ↗</a>
+                        </Menu.Item>
+                        <Menu.Item key="/twitter">
+                            <a href="https://twitter.com/CircleGameNFT" target="_blank">Twitter ↗</a>
+                        </Menu.Item>
+                        <Menu.Item key="/etherscan">
+                            <a href="https://etherscan.io/address/0x7dcfE966E0bE69Bd2aB6B35cE4Ec741ac7AcC571" target="_blank">Etherscan ↗</a>
+                        </Menu.Item>
+                        <Menu.Item key="/github">
+                            <a href="https://github.com/CircleGame" target="_blank">GitHub ↗</a>
+                        </Menu.Item>
+                    </Menu>
+                </Sider>
+                <Layout>
+                    <Header className="site-layout-sub-header-background" style={{ padding: 0 }} >
+                        <a href="https://circlegame.io" >
+                            <PageHeader
+                                title={"Circle Game (Current Pot: " + truncate(ethers.utils.formatEther(details[0]), 5) + " ETH)"}
+                                subTitle={Math.floor((new Date("02/13/2022").getTime() - Date.now()) / (1000 * 3600 * 24)) + " days left until the game ends!"}
+                                style={{ cursor: "pointer" }}
+                                className="site-page-header"
+                                avatar={{ src: `${process.env.PUBLIC_URL}/circlegameorange.png` }}
+                            />
+                        </a>
+                    </Header>
+                    <Content style={{ margin: '12px 16px 0' }}>
+                        <Switch>
+                            <Route exact path="/">
+                                <Home
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    potBalance={details[0]}
+                                    mintPrice={details[1]}
+                                />
+                            </Route>
+                            <Route exact path="/leaderboard">
+                                <Leaderboard
+                                    mainnetProvider={mainnetProvider}
+                                    blockExplorer={blockExplorer}
+                                />
+                            </Route>
+                            <Route exact path="/rules">
+                                <Rules
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    potBalance={details[0]}
+                                    mintPrice={details[1]}
+                                />
+                            </Route>
+                            <Route exact path="/simulator">
+                                <Simulator
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    potBalance={details[0]}
+                                    mintPrice={details[1]}
+                                    totalOrangeBalance={details[8]}
+                                    totalGreenBalance={details[9]}
+                                    totalRedBalance={details[10]}
+                                    totalBlueBalance={details[11]}
+                                    totalPurpleBalance={details[12]}
+                                    totalPinkBalance={details[13]}
+                                />
+                            </Route>
+                            <Route exact path="/mint">
+                                <Mint
+                                    address={address}
+                                    tx={tx}
+                                    readContracts={readContracts}
+                                    writeContracts={writeContracts}
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    mintPrice={details[1]}
+                                    orangeBalance={details[2]}
+                                    greenBalance={details[3]}
+                                    redBalance={details[4]}
+                                    blueBalance={details[5]}
+                                    purpleBalance={details[6]}
+                                    pinkBalance={details[7]}
+                                    totalOrangeBalance={details[8]}
+                                    totalGreenBalance={details[9]}
+                                    totalRedBalance={details[10]}
+                                    totalBlueBalance={details[11]}
+                                    totalPurpleBalance={details[12]}
+                                    totalPinkBalance={details[13]}
+                                />
+                            </Route>
+                            <Route exact path="/upgrade">
+                                <Upgrade
+                                    address={address}
+                                    tx={tx}
+                                    writeContracts={writeContracts}
+                                    readContracts={readContracts}
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    potBalance={details[0]}
+                                    orangeBalance={details[2]}
+                                    greenBalance={details[3]}
+                                    redBalance={details[4]}
+                                    blueBalance={details[5]}
+                                    purpleBalance={details[6]}
+                                    pinkBalance={details[7]}
+                                />
+                            </Route>
+                            <Route exact path="/claim">
+                                <Claim
+                                    address={address}
+                                    tx={tx}
+                                    writeContracts={writeContracts}
+                                    readContracts={readContracts}
+                                    numMinted={details[1] ? (details[1] - 1000000000000000) / 10000000000000 : 0}
+                                    potBalance={details[0]}
+                                    orangeBalance={details[2]}
+                                    greenBalance={details[3]}
+                                    redBalance={details[4]}
+                                    blueBalance={details[5]}
+                                    purpleBalance={details[6]}
+                                    pinkBalance={details[7]}
+                                    // adjustedNumberOfTokens={adjustedNumberOfTokens}
+                                    // claimableBalance={claimableBalance}
+                                    totalOrangeBalance={details[8]}
+                                    totalGreenBalance={details[9]}
+                                    totalRedBalance={details[10]}
+                                    totalBlueBalance={details[11]}
+                                    totalPurpleBalance={details[12]}
+                                    totalPinkBalance={details[13]}
+                                />
+                            </Route>
+                            {/* <Route exact path="/stats">
                     <Stats
                         address={address}
                         tx={tx}
@@ -334,44 +412,49 @@ function App(props) {
                         balancesLoaded={balancesLoaded}
                     />
                 </Route> */}
-                {/* <Route exact path="/advanced">
+                            {/* <Route exact path="/advanced">
                     <Advanced
                         numMinted={numMinted}
                         potBalance={potBalance}
                         mintPrice={details[1]} />
                 </Route> */}
-            </Switch>
+                        </Switch>
 
-            <ThemeSwitch />
-
-            {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
-            <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-                <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
-                    {USE_NETWORK_SELECTOR && (
-                        <div style={{ marginRight: 20 }}>
-                            <NetworkSwitch
-                                networkOptions={networkOptions}
-                                selectedNetwork={selectedNetwork}
-                                setSelectedNetwork={setSelectedNetwork}
-                            />
+                        {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
+                        <div style={{ position: "absolute", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+                            <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
+                                {USE_NETWORK_SELECTOR && (
+                                    <div style={{ marginRight: 20 }}>
+                                        <NetworkSwitch
+                                            networkOptions={networkOptions}
+                                            selectedNetwork={selectedNetwork}
+                                            setSelectedNetwork={setSelectedNetwork}
+                                        />
+                                    </div>
+                                )}
+                                <Account
+                                    useBurner={USE_BURNER_WALLET}
+                                    address={address}
+                                    localProvider={localProvider}
+                                    userSigner={userSigner}
+                                    mainnetProvider={mainnetProvider}
+                                    web3Modal={web3Modal}
+                                    loadWeb3Modal={loadWeb3Modal}
+                                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                                    blockExplorer={blockExplorer}
+                                />
+                            </div>
                         </div>
-                    )}
-                    <Account
-                        useBurner={USE_BURNER_WALLET}
-                        address={address}
-                        localProvider={localProvider}
-                        userSigner={userSigner}
-                        mainnetProvider={mainnetProvider}
-                        web3Modal={web3Modal}
-                        loadWeb3Modal={loadWeb3Modal}
-                        logoutOfWeb3Modal={logoutOfWeb3Modal}
-                        blockExplorer={blockExplorer}
-                    />
-                </div>
-            </div>
-            <Footer potBalance={details[0]} />
+
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        {/* <PageFooter /> */}
+                    </Footer>
+                </Layout>
+            </Layout>
         </div>
     );
 }
+
 
 export default App;
