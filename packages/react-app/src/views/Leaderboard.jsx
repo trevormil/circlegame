@@ -24,7 +24,7 @@ class Leaderboard extends React.Component {
         ["0xcb114805b901f7a9c38d5675272ef26459a7d805", [0, 0, 2, 0, 0, 0]],
     ]
 
-    lastUpdated = "1/24/2022";
+    lastUpdated = "2/10/2022";
 
 
     dataSource = [

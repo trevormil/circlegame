@@ -194,6 +194,8 @@ function App(props) {
 
     const loadWeb3Modal = useCallback(async () => {
         const provider = await web3Modal.connect();
+        console.log("PROVIDER", provider);
+        console.log("WEB3 PROVIDER", new ethers.providers.Web3Provider(provider))
         setInjectedProvider(new ethers.providers.Web3Provider(provider));
 
         provider.on("chainChanged", chainId => {
