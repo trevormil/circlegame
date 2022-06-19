@@ -1,4 +1,4 @@
-# Circle Game ⬤ ⬤ ⬤ ⬤ ⬤ ⬤
+# Circle Game &#11044;
 
 Circle Game was an NFT social experiment game and dApp ran in early 2022 where users can mint, collect, and upgrade different colored circle NFTs. The experiment had an element of game theory where 95% of the pot was claimable by the participants at the end of the game, but their claimable amount was determined by the quantity and quality of the circles collected. During the experiment's peak, over 2.7 ETH ($7000+ USD) were locked in the contract.
 
