@@ -1,10 +1,14 @@
-# Circle Game
+# Circle Game ⬤ ⬤ ⬤ ⬤ ⬤ ⬤
 
-https://twitter.com/CircleGameNFT
+Circle Game is an NFT social experiment game and dApp where users can mint, collect, and upgrade different colored circle NFTs. The experiment had an element of game theory where 95% of the pot was claimable by the participants at the end of the game, but their claimable amount was determined by the quantity and quality of the circles collected. The game has now concluded. During the experiment's peak, over 2.7 ETH ($7000+ USD) were locked in the contract. 
 
-https://discord.gg/ASCuCh5sz4
+Links:
 
-https://circlegame.io/
+Etherscan: [https://etherscan.io/address/0x7dcfE966E0bE69Bd2aB6B35cE4Ec741ac7AcC571](https://etherscan.io/address/0x7dcfE966E0bE69Bd2aB6B35cE4Ec741ac7AcC571)
+
+OpenSea: [https://opensea.io/collection/circlegamenft](https://opensea.io/collection/circlegamenft)
+
+Circle Game was built using the ScaffoldETH template repository. The README from the ScaffoldETH is provided below.
 
 # 🏗 Scaffold-ETH
 
